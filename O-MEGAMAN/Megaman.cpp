@@ -41,14 +41,10 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 	}
 	for (size_t i = 0; i < energyballs.size(); i++) {
 		energyballs[i].Update(elapsedTime, window, energyballs, i,checkLR);
-		if (energyballs[i].GetPosition().x >= window.getSize().x - 35) {
+		if (energyballs[i].GetPosition().x >= window.getSize().x - 35 || energyballs[i].GetPosition().x <= 20) {
 			energyballs.erase(energyballs.begin() + i);
 			shootTimer++;
 		}
-		//if (energyballs[i].GetPosition().x <= 20) {
-		//	energyballs.erase(energyballs.begin() + i);
-		//	shootTimer++;
-		//}
 	}
 	velocity.y += 981.0f * elapsedTime;
 	if (velocity.x == 0.0f)
