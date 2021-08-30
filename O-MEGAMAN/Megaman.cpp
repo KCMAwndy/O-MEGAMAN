@@ -1,18 +1,21 @@
 #include "Megaman.h"
 
 Megaman::Megaman(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed, float jumpHeight) :
-	animation(texture, imageCount, switchTime) {
+	animation(texture, imageCount, switchTime){
 	this->speed = speed;
 	this->jumpHeight = jumpHeight;
 	row = 0;
 	faceRight = true;
-	body.setSize(sf::Vector2f(60.0f, 60.0f));
+	checkLR = 1;
+	body.setSize(sf::Vector2f(70.0f, 70.0f));
 	//body.setOrigin(body.getSize() / 2.0f);
 	body.setPosition(360.0f, 720.0f);
 	body.setTexture(texture);
 }
 
 void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
+	sf::Texture energyballTexture;
+	energyballTexture.loadFromFile("Images/EnergyBall.png");
 	velocity.x = 0.0f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		velocity.x -= speed;
@@ -21,6 +24,31 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && canjump) {
 		canjump = false;
 		velocity.y = -sqrtf(2.0f * 981.0f * jumpHeight);
+	}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && shootTimer>=3) {
+	//	energyballs.push_back(EnergyBall(&energyballTexture, body.getPosition(), 100.0f));
+	//	shootTimer = 0;
+	//}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && shootTimer >= 3) {
+		energyballs.push_back(EnergyBall(&energyballTexture, body.getPosition(), 200.0f));
+		checkLR = 1;
+		shootTimer--;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && shootTimer >= 3) {
+		energyballs.push_back(EnergyBall(&energyballTexture, body.getPosition(), 200.0f));
+		checkLR = -1;
+		shootTimer--;
+	}
+	for (size_t i = 0; i < energyballs.size(); i++) {
+		energyballs[i].Update(elapsedTime, window, energyballs, i,checkLR);
+		if (energyballs[i].GetPosition().x >= window.getSize().x - 35) {
+			energyballs.erase(energyballs.begin() + i);
+			shootTimer++;
+		}
+		//if (energyballs[i].GetPosition().x <= 20) {
+		//	energyballs.erase(energyballs.begin() + i);
+		//	shootTimer++;
+		//}
 	}
 	velocity.y += 981.0f * elapsedTime;
 	if (velocity.x == 0.0f)
@@ -52,25 +80,28 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 
 void Megaman::Draw(sf::RenderWindow& window) {
 	window.draw(body);
+	for (size_t i = 0; i < energyballs.size(); i++) {
+		energyballs[i].Draw(window);
+	}
 }
 
-void Megaman::OnCollision(sf::Vector2f direction)
-{
-	if (direction.x < 0.0f) {
-		velocity.x = 0.0f;//Colision on the left
+//void Megaman::OnCollision(sf::Vector2f direction)
+//{
+//	if (direction.x < 0.0f) {
+//		velocity.x = 0.0f;//Colision on the left
 		// ผ่านไม่ได้มีสิ่งของอยู่ด้านช้าย v = 0
-	}
-	else if (direction.x > 0.0f) {
-		velocity.x = 0.0f;//Colision on the right
+//	}
+//	else if (direction.x > 0.0f) {
+//		velocity.x = 0.0f;//Colision on the right
 		// ผ่านไม่ได้มีสิ่งของอยู่ด้านขวา v = 0
-	}
-	if (direction.y < 0.0f ) {
-		velocity.y = 0.0f;//Colision on the bottom
-		canjump = true;
+//	}
+//	if (direction.y < 0.0f ) {
+//		velocity.y = 0.0f;//Colision on the bottom
+//		canjump = true;
 		// ผ่านไม่ได้มีสิ่งของอยู่ล่าง , กระโดดได้ , v = 0
-	}
-	else if (direction.y > 0.0f) {
-		velocity.y = 0.0f;//Colision on the top
+//	}
+//	else if (direction.y > 0.0f) {
+//		velocity.y = 0.0f;//Colision on the top
 		// ผ่านไม่ได้มีสิ่งของอยู่บน v = 0
-	}
-}
+//	}
+//}

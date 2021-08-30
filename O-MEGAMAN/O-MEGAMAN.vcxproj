@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="EnergyBall.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Megaman.cpp" />
     <ClCompile Include="Platform.cpp" />
@@ -154,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="EnergyBall.h" />
     <ClInclude Include="Megaman.h" />
     <ClInclude Include="Platform.h" />
   </ItemGroup>
