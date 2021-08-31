@@ -7,7 +7,7 @@ class EnergyBall
 {
 public:
 	EnergyBall(sf::Texture* texture,sf::Vector2f position, float speed);
-	void Update(float elapsedTime, sf::RenderWindow& window,std::vector<class EnergyBall> energyballs, int i, int checkLR);
+	void Update(float elapsedTime, sf::RenderWindow& window,std::vector<class EnergyBall> energyballs,bool checkUP, bool checkLR);
 	void Draw(sf::RenderWindow& window);
 	void OnCollision(sf::Vector2f direction);
 	sf::Vector2f GetPosition() {

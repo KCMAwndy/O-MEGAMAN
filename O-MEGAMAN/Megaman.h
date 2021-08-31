@@ -21,7 +21,8 @@ public:
 	}
 private:
 	int shootTimer=3;
-	int checkLR ;
+	bool checkLR ;
+	bool checkUP;
 	sf::RectangleShape body;
 	sf::Texture energyBallTexture;
 	Animation animation;

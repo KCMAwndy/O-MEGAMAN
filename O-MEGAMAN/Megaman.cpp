@@ -6,7 +6,8 @@ Megaman::Megaman(sf::Texture* texture, sf::Vector2u imageCount, float switchTime
 	this->jumpHeight = jumpHeight;
 	row = 0;
 	faceRight = true;
-	checkLR = 1;
+	checkLR = true;
+	checkUP = false;
 	body.setSize(sf::Vector2f(70.0f, 70.0f));
 	//body.setOrigin(body.getSize() / 2.0f);
 	body.setPosition(360.0f, 720.0f);
@@ -25,23 +26,29 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 		canjump = false;
 		velocity.y = -sqrtf(2.0f * 981.0f * jumpHeight);
 	}
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && shootTimer>=3) {
-	//	energyballs.push_back(EnergyBall(&energyballTexture, body.getPosition(), 100.0f));
-	//	shootTimer = 0;
-	//}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && shootTimer >= 3) {
+
+	//if(shootTimer<3)	shootTimer++;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && shootTimer>=3) {
+		checkUP = true;
 		energyballs.push_back(EnergyBall(&energyballTexture, body.getPosition(), 200.0f));
-		checkLR = 1;
+		shootTimer--;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && shootTimer >= 3) {
+		checkLR = true;
+		checkUP = false;
+		energyballs.push_back(EnergyBall(&energyballTexture, body.getPosition(), 200.0f));
 		shootTimer--;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && shootTimer >= 3) {
+		checkLR = false;
+		checkUP = false;
 		energyballs.push_back(EnergyBall(&energyballTexture, body.getPosition(), 200.0f));
-		checkLR = -1;
 		shootTimer--;
 	}
 	for (size_t i = 0; i < energyballs.size(); i++) {
-		energyballs[i].Update(elapsedTime, window, energyballs, i,checkLR);
-		if (energyballs[i].GetPosition().x >= window.getSize().x - 35 || energyballs[i].GetPosition().x <= 20) {
+		energyballs[i].Update(elapsedTime, window, energyballs,checkUP,checkLR);
+		if (energyballs[i].GetPosition().x >= window.getSize().x - 35 || energyballs[i].GetPosition().x <= 20 || energyballs[i].GetPosition().y <= 60) {
 			energyballs.erase(energyballs.begin() + i);
 			shootTimer++;
 		}

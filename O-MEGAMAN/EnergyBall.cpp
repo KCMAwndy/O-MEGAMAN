@@ -9,8 +9,16 @@ EnergyBall::EnergyBall(sf::Texture* texture,sf::Vector2f position,float speed){
 	body.setTexture(texture);
 }
 
-void EnergyBall::Update(float elapsedTime, sf::RenderWindow& window,std::vector<class EnergyBall> energyballs,int i,int checkLR) {
-	velocity.x = 100.0f*checkLR;
+void EnergyBall::Update(float elapsedTime, sf::RenderWindow& window,std::vector<class EnergyBall> energyballs,bool checkUP,bool checkLR) {
+	if (checkLR && checkUP==false){
+		velocity.x = 100.0f ;
+	}
+	else if (checkUP) {
+		velocity.y = -100.0f;
+	}
+	else{
+		velocity.x = -100.0f;
+	}
 	//if (body.getPosition().x <= 20)		//LEFT
 	//	body.setPosition(sf::Vector2f(20.0f, body.getPosition().y));		
 	//if (body.getPosition().x >= window.getSize().x - body.getGlobalBounds().width - 20) {	//RIGHT 
