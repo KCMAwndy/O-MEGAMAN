@@ -30,7 +30,7 @@ void EnergyBall::Update(float elapsedTime, sf::RenderWindow& window,std::vector<
 }
 
 	void EnergyBall::Draw(sf::RenderWindow& window) {
-		window.draw(body);
+	window.draw(body);
 }
 
 void EnergyBall::OnCollision(sf::Vector2f direction)

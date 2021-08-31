@@ -150,6 +150,7 @@
     <ClCompile Include="EnergyBall.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Megaman.cpp" />
+    <ClCompile Include="Minion.cpp" />
     <ClCompile Include="Platform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +158,7 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EnergyBall.h" />
     <ClInclude Include="Megaman.h" />
+    <ClInclude Include="Minion.h" />
     <ClInclude Include="Platform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

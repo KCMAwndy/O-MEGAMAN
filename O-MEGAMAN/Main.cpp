@@ -6,6 +6,7 @@
 #include "Collider.h"
 #include "Platform.h"
 #include"EnergyBall.h"
+#include "Minion.h"
 
 static const float VIEW_HEIGHT = 960.0f;
 
@@ -21,6 +22,17 @@ int main() {
 	sf::Texture megamanTexture;
 	megamanTexture.loadFromFile("Images/Megaman_movement.png");
 	Megaman megaman(&megamanTexture, sf::Vector2u(3, 15), 0.8f, 150.0f, 300.0f);
+
+	std::vector<Minion> minions;
+
+	sf::Texture groundMinionLeftTexture;
+	groundMinionLeftTexture.loadFromFile("Images/groundMinion_Left.png");
+	sf::Texture groundMinionRightTexture;
+	groundMinionRightTexture.loadFromFile("Images/groundMinion_Right.png");
+
+	minions.push_back(Minion(&groundMinionRightTexture,sf::Vector2f(25.0f, 680.0f), 200.0f));
+	minions.push_back(Minion(&groundMinionLeftTexture,sf::Vector2f(615.0f, 680.0f),200.0f));
+
 	//std::vector<Platform> platforms;
 	//sf::RectangleShape ground;
 	//sf::Texture groundTexture;
@@ -82,6 +94,15 @@ int main() {
 		window.clear();
 		//window.setView(view);
 		window.draw(screen);
+		for (size_t i = 0; i < minions.size(); i++) {
+			minions[i].Draw(window);
+		}
+		for (size_t i = 0; i < minions.size(); i++) {
+			minions[i].Update(elapsedTime);
+			if (minions[i].GetPosition().x >= window.getSize().x - 100 || minions[i].GetPosition().x <= 20) {
+				minions.erase(minions.begin() + i);
+			}
+		}
 		//window.draw(ground);
 		//window.draw(leftWall);
 		//window.draw(rightWall);

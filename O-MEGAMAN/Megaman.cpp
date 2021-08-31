@@ -82,10 +82,10 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 }
 
 void Megaman::Draw(sf::RenderWindow& window) {
-	window.draw(body);
 	for (size_t i = 0; i < energyballs.size(); i++) {
 		energyballs[i].Draw(window);
 	}
+	window.draw(body);
 }
 
 //void Megaman::OnCollision(sf::Vector2f direction)
