@@ -1,6 +1,8 @@
 #include<SFML\Graphics.hpp>
 #include<iostream>
 #include<vector>
+#include<cstdlib>
+#include<ctime>
 #include"Animation.h"
 #include"Megaman.h"
 #include "Collider.h"
@@ -29,9 +31,17 @@ int main() {
 	groundMinionLeftTexture.loadFromFile("Images/groundMinion_Left.png");
 	sf::Texture groundMinionRightTexture;
 	groundMinionRightTexture.loadFromFile("Images/groundMinion_Right.png");
+	sf::Texture AirMinion01Texture;
+	AirMinion01Texture.loadFromFile("Images/AirMinion_1.png");
+	sf::Texture AirMinion02Texture;
+	AirMinion02Texture.loadFromFile("Images/AirMinion_2.png");
 
-	minions.push_back(Minion(&groundMinionRightTexture,sf::Vector2f(25.0f, 680.0f), 200.0f));
-	minions.push_back(Minion(&groundMinionLeftTexture,sf::Vector2f(615.0f, 680.0f),200.0f));
+	std::srand(time(0));
+	//printf("%d\n", std::rand() % 191 + 370);
+	minions.push_back(Minion(&groundMinionRightTexture,sf::Vector2f(25.0f, 680.0f), sf::Vector2f(80.0f, 100.0f), 200.0f));
+	minions.push_back(Minion(&groundMinionLeftTexture,sf::Vector2f(615.0f, 680.0f), sf::Vector2f(80.0f, 100.0f),200.0f));
+	minions.push_back(Minion(&AirMinion01Texture, sf::Vector2f(615.0f,std::rand() % 141 + 490.0f), sf::Vector2f(70.0f, 50.0f), 200.0f));
+	minions.push_back(Minion(&AirMinion02Texture, sf::Vector2f(25.0f, std::rand() % 141 + 360.0f), sf::Vector2f(70.0f, 70.0f), 200.0f));
 
 	//std::vector<Platform> platforms;
 	//sf::RectangleShape ground;

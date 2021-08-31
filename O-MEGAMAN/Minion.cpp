@@ -1,8 +1,8 @@
 #include "Minion.h"
 
-Minion::Minion(sf::Texture* texture, sf::Vector2f position, float speed){
+Minion::Minion(sf::Texture* texture, sf::Vector2f position,sf::Vector2f size,float speed){
 	this->speed = speed;
-	body.setSize(sf::Vector2f(80.0f, 100.0f));
+	body.setSize(size);
 	//body.setOrigin(body.getSize() / 2.0f);
 	body.setPosition(position);
 	collectPostition = position.x;

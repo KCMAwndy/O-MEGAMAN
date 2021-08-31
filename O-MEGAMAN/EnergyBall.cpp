@@ -1,23 +1,23 @@
 #include "EnergyBall.h"
 
-EnergyBall::EnergyBall(sf::Texture* texture,sf::Vector2f position,float speed){
+EnergyBall::EnergyBall(sf::Texture* texture,sf::Vector2f position, sf::Vector2f size,float speed){
 	this->speed = speed;
 	faceRight = true;
-	body.setSize(sf::Vector2f(10.0f, 10.0f));
-	//body.setOrigin(body.getSize() / 2.0f);
+	body.setSize(size);
+	body.setOrigin(body.getSize() / 2.0f);
 	body.setPosition(position);
 	body.setTexture(texture);
 }
 
 void EnergyBall::Update(float elapsedTime, sf::RenderWindow& window,std::vector<class EnergyBall> energyballs,bool checkUP,bool checkLR) {
 	if (checkLR && checkUP==false){
-		velocity.x = 100.0f ;
+		velocity.x = 200.0f ;
 	}
 	else if (checkUP) {
-		velocity.y = -100.0f;
+		velocity.y = -200.0f;
 	}
 	else{
-		velocity.x = -100.0f;
+		velocity.x = -200.0f;
 	}
 	//if (body.getPosition().x <= 20)		//LEFT
 	//	body.setPosition(sf::Vector2f(20.0f, body.getPosition().y));		

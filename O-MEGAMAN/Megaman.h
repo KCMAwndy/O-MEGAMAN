@@ -24,7 +24,9 @@ private:
 	bool checkLR ;
 	bool checkUP;
 	sf::RectangleShape body;
-	sf::Texture energyBallTexture;
+	sf::Texture energyballRightTexture;
+	sf::Texture energyballLeftTexture;
+	sf::Texture megaBulletTexture;
 	Animation animation;
 	unsigned int row;
 	float speed;

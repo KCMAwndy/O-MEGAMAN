@@ -6,7 +6,7 @@
 class Minion
 {
 public:
-	Minion(sf::Texture* texture,sf::Vector2f position,float speed);
+	Minion(sf::Texture* texture,sf::Vector2f position, sf::Vector2f size,float speed);
 	void Update(float elapsedTime);
 	void Draw(sf::RenderWindow& window);
 	std::vector<Minion> minions;
