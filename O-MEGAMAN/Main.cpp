@@ -9,6 +9,7 @@
 #include "Platform.h"
 #include"EnergyBall.h"
 #include "Minion.h"
+#include "BatBoss.h"
 
 static const float VIEW_HEIGHT = 960.0f;
 
@@ -19,11 +20,18 @@ void ResizeView(const sf::RenderWindow& window){
 }
 
 int main() {
+	bool spawnMinion[4] = { true,true,true,true };
+	int spawnNum = 0;
+	//printf("HELLO ME NA");
 	sf::RenderWindow window(sf::VideoMode(720, 960), "O-MEGAMAN GAME", sf::Style::Close | sf::Style::Resize);
-//	sf::View view(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(VIEW_HEIGHT, VIEW_HEIGHT));
+	//	sf::View view(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(VIEW_HEIGHT, VIEW_HEIGHT));
 	sf::Texture megamanTexture;
 	megamanTexture.loadFromFile("Images/Megaman_movement.png");
 	Megaman megaman(&megamanTexture, sf::Vector2u(3, 15), 0.8f, 150.0f, 300.0f);
+
+	sf::Texture batbossTexture;
+	batbossTexture.loadFromFile("Images/MegaBoss_Movement.png");
+	BatBoss batboss(&batbossTexture, sf::Vector2u(2, 1), 0.9f, 150.0f);
 
 	std::vector<Minion> minions;
 
@@ -38,10 +46,10 @@ int main() {
 
 	std::srand(time(0));
 	//printf("%d\n", std::rand() % 191 + 370);
-	minions.push_back(Minion(&groundMinionRightTexture,sf::Vector2f(25.0f, 680.0f), sf::Vector2f(80.0f, 100.0f), 200.0f));
-	minions.push_back(Minion(&groundMinionLeftTexture,sf::Vector2f(615.0f, 680.0f), sf::Vector2f(80.0f, 100.0f),200.0f));
-	minions.push_back(Minion(&AirMinion01Texture, sf::Vector2f(615.0f,std::rand() % 141 + 490.0f), sf::Vector2f(70.0f, 50.0f), 200.0f));
-	minions.push_back(Minion(&AirMinion02Texture, sf::Vector2f(25.0f, std::rand() % 141 + 360.0f), sf::Vector2f(70.0f, 70.0f), 200.0f));
+	//minions.push_back(Minion(&groundMinionRightTexture,sf::Vector2f(25.0f, 680.0f), sf::Vector2f(80.0f, 100.0f), 200.0f));
+	//minions.push_back(Minion(&groundMinionLeftTexture,sf::Vector2f(615.0f, 680.0f), sf::Vector2f(80.0f, 100.0f),200.0f));
+	//minions.push_back(Minion(&AirMinion01Texture, sf::Vector2f(615.0f,std::rand() % 141 + 490.0f), sf::Vector2f(70.0f, 50.0f), 200.0f));
+	//minions.push_back(Minion(&AirMinion02Texture, sf::Vector2f(25.0f, std::rand() % 141 + 360.0f), sf::Vector2f(70.0f, 70.0f), 200.0f));
 
 	//std::vector<Platform> platforms;
 	//sf::RectangleShape ground;
@@ -72,7 +80,7 @@ int main() {
 	sf::Sprite screen;
 	screenTexture.loadFromFile("Images/Background.png");
 	screen.setTexture(screenTexture);
-	screen.setPosition(0.0f,0.0f);
+	screen.setPosition(0.0f, 0.0f);
 
 	float elapsedTime = 0.0f;
 	sf::Clock clock;
@@ -98,7 +106,24 @@ int main() {
 				break;
 			}
 		}
-		megaman.Update(elapsedTime,window);
+		if (spawnMinion[0]) {
+			minions.push_back(Minion(&groundMinionRightTexture, sf::Vector2f(25.0f, 680.0f), sf::Vector2f(80.0f, 100.0f), 200.0f));
+			spawnMinion[0] = false;
+		}
+		if (spawnMinion[1] ) {
+			minions.push_back(Minion(&groundMinionLeftTexture, sf::Vector2f(615.0f, 680.0f), sf::Vector2f(80.0f, 100.0f), 200.0f));
+			spawnMinion[1] = false;
+		}
+		if (spawnMinion[2] ) {
+			minions.push_back(Minion(&AirMinion01Texture, sf::Vector2f(615.0f, std::rand() % 141 + 490.0f), sf::Vector2f(70.0f, 50.0f), 200.0f));
+			spawnMinion[2] = false;
+		}
+		if (spawnMinion[3]) {
+			minions.push_back(Minion(&AirMinion02Texture, sf::Vector2f(25.0f, std::rand() % 141 + 360.0f), sf::Vector2f(70.0f, 70.0f), 200.0f));
+			spawnMinion[3] = false;
+		}
+		megaman.Update(elapsedTime, window);
+		batboss.Update(elapsedTime, window);
 		sf::Vector2f direction;
 		//Collider megamanCollider = megaman.GetCollider();
 		window.clear();
@@ -109,16 +134,21 @@ int main() {
 		}
 		for (size_t i = 0; i < minions.size(); i++) {
 			minions[i].Update(elapsedTime);
+		//	printf("%d",i);
 			if (minions[i].GetPosition().x >= window.getSize().x - 100 || minions[i].GetPosition().x <= 20) {
 				minions.erase(minions.begin() + i);
+				spawnMinion[spawnNum] = true;
+				spawnNum = (spawnNum + 1) % 4;
+			//	printf("%d", spawnNum);
 			}
 		}
-		//window.draw(ground);
-		//window.draw(leftWall);
-		//window.draw(rightWall);
-		//window.draw(upWall);
-		megaman.Draw(window);
-		window.display();
-	}
-	return 0;
+			//window.draw(ground);
+			//window.draw(leftWall);
+			//window.draw(rightWall);
+			//window.draw(upWall);
+			megaman.Draw(window);
+			batboss.Draw(window);
+			window.display();
+		}
+		return 0;
 }

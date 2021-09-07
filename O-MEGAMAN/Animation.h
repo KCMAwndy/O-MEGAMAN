@@ -6,6 +6,7 @@ class Animation
 public:
 	Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
 	void Update(int row, float elapsedTime, bool faceRight);
+	void UpdateBoss(int row, float elapsedTime);
 public:
 	sf::IntRect currentRect;
 private:

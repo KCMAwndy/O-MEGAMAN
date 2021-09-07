@@ -4,15 +4,16 @@
 #include"Animation.h"
 #include"Collider.h"
 #include"EnergyBall.h"
+#include"Megaman.h"
 
-class Megaman
+class BatBoss
 {
 public:
-	Megaman(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed, float jumpHeight);
+	BatBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed);
 	void Update(float elapsedTime, sf::RenderWindow& window);
 	void Draw(sf::RenderWindow& window);
-	//void OnCollision(sf::Vector2f direction);
 	std::vector<class EnergyBall>	energyballs;
+	//void OnCollision(sf::Vector2f direction);
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
 	}
@@ -20,20 +21,14 @@ public:
 		return Collider(body);
 	}
 private:
-	int shootTimer;
-	bool checkLR ;
-	bool checkUP;
 	sf::RectangleShape body;
-	sf::Texture energyballRightTexture;
-	sf::Texture energyballLeftTexture;
-	sf::Texture megaBulletTexture;
 	Animation animation;
+	//Megaman megaman;
+	sf::Texture energyballBossTexture;
+	bool checkLR;
+	bool checkUP;
+	int checkBott;
 	unsigned int row;
 	float speed;
-	bool faceRight;
-	int checkBott;
 	sf::Vector2f velocity;
-	bool canjump = false;
-	float jumpHeight;
-	float height = 0.0;
 };

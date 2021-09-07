@@ -9,8 +9,7 @@ Animation::Animation(sf::Texture* texture, sf::Vector2u imageCount, float switch
 	currentRect.height = texture->getSize().y / float(imageCount.y);
 }
 
-void Animation::Update(int row, float elapsedTime, bool faceRight)
-{
+void Animation::Update(int row, float elapsedTime, bool faceRight){
 	currentImage.y = row;
 	totalTime += elapsedTime;
 	if (totalTime >= switchTime) {
@@ -29,4 +28,18 @@ void Animation::Update(int row, float elapsedTime, bool faceRight)
 		currentRect.left = (currentImage.x + 1) * abs(currentRect.width);
 		currentRect.width = -abs(currentRect.width);
 	}
+}
+
+void Animation::UpdateBoss(int row, float elapsedTime){
+	currentImage.y = row;
+	totalTime += elapsedTime;
+	if (totalTime >= switchTime) {
+		totalTime -= switchTime;
+		currentImage.x++;
+		if (currentImage.x >= imageCount.x) {
+			currentImage.x = 0;
+		}
+	}
+	currentRect.top = currentImage.y * currentRect.height;
+	currentRect.left = currentImage.x * currentRect.width;
 }

@@ -17,6 +17,7 @@ public:
 	Collider GetCollider() {
 		return Collider(body);
 	}
+	Collider CheckCollision(Collider& other, sf::Vector2f direction, float push);
 //	bool CheckLR(std::vector<class Minion> minions,int i);
 private:
 	sf::RectangleShape body;
