@@ -3,7 +3,7 @@
 Minion::Minion(sf::Texture* texture, sf::Vector2f position,sf::Vector2f size,float speed){
 	this->speed = speed;
 	body.setSize(size);
-	//body.setOrigin(body.getSize() / 2.0f);
+	body.setOrigin(body.getSize() / 2.0f);
 	body.setPosition(position);
 	collectPostition = position.x;
 	body.setTexture(texture);
@@ -12,10 +12,10 @@ Minion::Minion(sf::Texture* texture, sf::Vector2f position,sf::Vector2f size,flo
 
 void Minion::Update(float elapsedTime) {
 	if (collectPostition > 360.0f) {
-		velocity.x = -100.0f;
+		velocity.x = -50.0f;
 	}
 	else if(collectPostition < 360.0f){
-		velocity.x = 100.0f;
+		velocity.x = 50.0f;
 	}
 	body.move(velocity * elapsedTime);
 }

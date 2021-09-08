@@ -12,26 +12,29 @@ public:
 	void Update(float elapsedTime, sf::RenderWindow& window);
 	void Draw(sf::RenderWindow& window);
 	//void OnCollision(sf::Vector2f direction);
-	std::vector<class EnergyBall>	energyballs;
+	//std::vector<class EnergyBall>	energyballs;
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
+	}
+	sf::Vector2f GetOrigin() {
+		return body.getOrigin();
 	}
 	Collider GetCollider() {
 		return Collider(body);
 	}
 private:
-	int shootTimer;
-	bool checkLR ;
-	bool checkUP;
+	//int shootTimer;
+	//bool checkLR ;
+	//bool checkUP;
 	sf::RectangleShape body;
-	sf::Texture energyballRightTexture;
-	sf::Texture energyballLeftTexture;
-	sf::Texture megaBulletTexture;
+	//sf::Texture energyballRightTexture;
+	//sf::Texture energyballLeftTexture;
+	//sf::Texture megaBulletTexture;
 	Animation animation;
 	unsigned int row;
 	float speed;
 	bool faceRight;
-	int checkBott;
+	//int checkBott;
 	sf::Vector2f velocity;
 	bool canjump = false;
 	float jumpHeight;

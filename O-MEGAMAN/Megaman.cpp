@@ -6,10 +6,10 @@ Megaman::Megaman(sf::Texture* texture, sf::Vector2u imageCount, float switchTime
 	this->jumpHeight = jumpHeight;
 	row = 0;
 	faceRight = true;
-	checkLR = true;
-	checkUP = false;
-	checkBott = 0;
-	shootTimer = 1;
+	//checkLR = true;
+	//checkUP = false;
+	//checkBott = 0;
+	//shootTimer = 1;
 	body.setSize(sf::Vector2f(70.0f, 70.0f));
 	body.setOrigin(body.getSize() / 2.0f);
 	body.setPosition(360.0f, 500.0f);
@@ -18,10 +18,10 @@ Megaman::Megaman(sf::Texture* texture, sf::Vector2u imageCount, float switchTime
 
 void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 
-	energyballRightTexture.loadFromFile("Images/EnergyBallRight.png");
-	energyballLeftTexture.loadFromFile("Images/EnergyBallleft.png");
-	megaBulletTexture.loadFromFile("Images/MegaBullet.png");
-
+	//energyballRightTexture.loadFromFile("Images/EnergyBallRight.png");
+	//energyballLeftTexture.loadFromFile("Images/EnergyBallleft.png");
+	//megaBulletTexture.loadFromFile("Images/MegaBullet.png");
+	/*
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && shootTimer>=1) {
 		checkLR = false;
 		checkUP = true;
@@ -42,7 +42,7 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 		shootTimer--;
 
 	}
-
+	*/
 	velocity.x = 0.0f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		velocity.x -= speed;
@@ -54,6 +54,7 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 	}
 
 	//if(shootTimer<3)	shootTimer++;
+	/*
 	for (size_t i = 0; i < energyballs.size(); i++) {
 		energyballs[i].Update(elapsedTime, window, energyballs,checkUP, checkBott ,checkLR); // ขวา , ซ้าย , บน
 		if (energyballs[i].GetPosition().x >= window.getSize().x - 40.0f || energyballs[i].GetPosition().x <= 40.0f || energyballs[i].GetPosition().y <= 60.0f+30.0f ) {
@@ -61,6 +62,7 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 			shootTimer++;
 		}
 	}
+	*/
 	velocity.y += 981.0f * elapsedTime;
 	if (velocity.x == 0.0f)
 		row = 0;
@@ -90,9 +92,9 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 }
 
 void Megaman::Draw(sf::RenderWindow& window) {
-	for (size_t i = 0; i < energyballs.size(); i++) {
-		energyballs[i].Draw(window);
-	}
+//	for (size_t i = 0; i < energyballs.size(); i++) {
+//		energyballs[i].Draw(window);
+//	}
 	window.draw(body);
 }
 
