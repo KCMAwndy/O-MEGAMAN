@@ -149,6 +149,7 @@
     <ClCompile Include="BatBoss.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="EnergyBall.cpp" />
+    <ClCompile Include="Items.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Megaman.cpp" />
     <ClCompile Include="Minion.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="BatBoss.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="EnergyBall.h" />
+    <ClInclude Include="Items.h" />
     <ClInclude Include="Megaman.h" />
     <ClInclude Include="Minion.h" />
     <ClInclude Include="Platform.h" />

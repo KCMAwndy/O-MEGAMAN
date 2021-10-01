@@ -1,6 +1,6 @@
 #include "BatBoss.h"
 
-BatBoss::BatBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed) :
+BatBoss::BatBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position,float speed) :
 	animation(texture, imageCount, switchTime) {
 	row = 0;
 	this->speed = speed;
@@ -9,30 +9,40 @@ BatBoss::BatBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime
 	checkBott = 0;
 	body.setSize(sf::Vector2f(240.0f, 120.0f));
 	body.setOrigin(body.getSize() / 2.0f);
-	body.setPosition(360.0f, 140.0f);
+	body.setPosition(position);
 	body.setTexture(texture);
 }
 
-void BatBoss::Update(float elapsedTime, sf::RenderWindow& window) {
-	energyballBossTexture.loadFromFile("Images/MegaBossEnergyBall2.png");
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
-		energyballs.push_back(EnergyBall(&energyballBossTexture, sf::Vector2f(body.getPosition()), sf::Vector2f(40.0f, 80.0f), 200.0f));
-	}
+//void BatBoss::Update(float elapsedTime, sf::RenderWindow& window) {
+	//energyballBossTexture.loadFromFile("Images/MegaBossEnergyBall2.png");
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+	//	energyballs.push_back(EnergyBall(&energyballBossTexture, sf::Vector2f(body.getPosition()), sf::Vector2f(40.0f, 80.0f), 200.0f));
+	//}
 	//energyballs.push_back(EnergyBall(&energyballBossTexture, sf::Vector2f(body.getPosition()), sf::Vector2f(30.0f, 40.0f), 200.0f));
-	velocity.x = 0.0f;
+	//velocity.x = 0.0f;
+	//row = 0;
+	//checkBott = 1;
+	//animation.UpdateBoss(row, elapsedTime);
+	//body.setTextureRect(animation.currentRect);
+	//body.move(velocity * elapsedTime);
+
+	//for (size_t i = 0; i < energyballs.size(); i++) {
+	//	energyballs[i].Update(elapsedTime, window, energyballs, checkUP,checkBott,checkLR); //bottom
+	//	if (energyballs[i].GetPosition().y >= window.getSize().y  - 230.0f) {
+	//		energyballs.erase(energyballs.begin() + i);
+	//	}
+	//}
+//}
+
+void BatBoss::Update(float elapsedTime,float movement) {
+	velocity.y = 0.0f;
+	velocity.x = movement;
 	row = 0;
-	checkBott = 1;
 	animation.UpdateBoss(row, elapsedTime);
 	body.setTextureRect(animation.currentRect);
-	body.move(velocity * elapsedTime);
-
-	for (size_t i = 0; i < energyballs.size(); i++) {
-		energyballs[i].Update(elapsedTime, window, energyballs, checkUP,checkBott,checkLR); //bottom
-		if (energyballs[i].GetPosition().y >= window.getSize().y  - 230.0f) {
-			energyballs.erase(energyballs.begin() + i);
-		}
-	}
+	body.move(velocity);
 }
+
 
 void BatBoss::Draw(sf::RenderWindow& window) {
 	window.draw(body);

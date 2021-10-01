@@ -1,5 +1,6 @@
 #include<SFML\Graphics.hpp>
 #include<iostream>
+#include<sstream>
 #include<vector>
 #include<cstdlib>
 #include<ctime>
@@ -10,6 +11,7 @@
 #include"EnergyBall.h"
 #include "Minion.h"
 #include "BatBoss.h"
+#include"Items.h"
 
 static const float VIEW_HEIGHT = 960.0f;
 
@@ -19,8 +21,21 @@ void ResizeView(const sf::RenderWindow& window){
 	//screen.setSize(sf::Vector2f(VIEW_HEIGHT * aspectRatio, VIEW_HEIGHT));
 }
 
+void UpdateScore(std::ostringstream *pscore,int *score) {
+	pscore->str(" ");
+	*pscore << *score;
+}
+
 int main() {
-	bool spawnMinion[4] = { true,true,true,true };
+	int enCount=0,score=0,megaHP=100,bossHp=500,minionSpeed=80.0f;
+	int *ptrenCount,*ptrScore,*ptrMegaHP,*ptrBossHP,*ptrminionSpeed;
+	ptrenCount = &enCount;
+	ptrScore = &score;
+	ptrMegaHP = &megaHP;
+	ptrBossHP = &bossHp;
+	ptrminionSpeed = &minionSpeed;
+	int colldataitem = 0;
+	bool spawnMinion[4] = { false,false,true,true };
 	//float spawnNum = 0.0f;
 	//printf("HELLO ME NA");
 	sf::RenderWindow window(sf::VideoMode(720, 960), "O-MEGAMAN GAME", sf::Style::Close | sf::Style::Resize);
@@ -31,7 +46,7 @@ int main() {
 
 	sf::Texture batbossTexture;
 	batbossTexture.loadFromFile("Images/MegaBoss_Movement.png");
-	BatBoss batboss(&batbossTexture, sf::Vector2u(2, 1), 0.9f, 150.0f);
+	BatBoss batboss(&batbossTexture, sf::Vector2u(2, 1), 0.9f, sf::Vector2f(360.0f, 140.0f), 150.0f);
 
 	sf::Texture energyballRightTexture;
 	sf::Texture energyballLeftTexture;
@@ -59,7 +74,26 @@ int main() {
 	sf::Texture AirMinion02Texture;
 	AirMinion02Texture.loadFromFile("Images/AirMinion_2.png");
 
-	std::srand(time(0));
+	std::vector<Items> HPItem;
+	std::vector<Items> coinItem;
+	std::vector<Items> trapItem;
+	sf::Texture HPTexture;
+	HPTexture.loadFromFile("Images/Heart.png");
+	sf::Texture coinTexture;
+	coinTexture.loadFromFile("Images/Coin.png");
+	sf::Texture TrapTexture;
+	TrapTexture.loadFromFile("Images/Trap.png");
+
+	sf::Font scoreFont;
+	scoreFont.loadFromFile("Fonts/TIme TRap.ttf");
+	std::ostringstream ssScore;
+	ssScore << *ptrScore;
+	std::ostringstream ssMegaHP;
+	ssMegaHP << *ptrMegaHP;
+	std::ostringstream ssBossHP;
+	ssBossHP << *ptrBossHP;
+	
+	std::srand(time(NULL));
 	//printf("%d\n", std::rand() % 191 + 370);
 	//minions.push_back(Minion(&groundMinionRightTexture,sf::Vector2f(25.0f, 680.0f), sf::Vector2f(80.0f, 100.0f), 200.0f));
 	//minions.push_back(Minion(&groundMinionLeftTexture,sf::Vector2f(615.0f, 680.0f), sf::Vector2f(80.0f, 100.0f),200.0f));
@@ -125,6 +159,22 @@ int main() {
 		}
 		//printf("%f", elapsedTime);
 
+		sf::Text TextScore;
+		TextScore.setCharacterSize(30);
+		TextScore.setPosition(340.0f, 865.0f);
+		TextScore.setFont(scoreFont);
+		TextScore.setString(ssScore.str());
+		sf::Text MegaHP;
+		MegaHP.setCharacterSize(30);
+		MegaHP.setPosition(125.0f, 865.0f);
+		MegaHP.setFont(scoreFont);
+		MegaHP.setString(ssMegaHP.str());
+		sf::Text BossHP;
+		BossHP.setCharacterSize(30);
+		BossHP.setPosition(555.0f, 865.0f);
+		BossHP.setFont(scoreFont);
+		BossHP.setString(ssBossHP.str());
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && shootTimer >= 1) {
 			checkLR = false;
 			checkUP = true;
@@ -146,31 +196,49 @@ int main() {
 
 		}
 		for (size_t i = 0; i < energyballs.size(); i++) {
+			// energyball - corner
 			energyballs[i].Update(elapsedTime, window, energyballs, checkUP, checkBott, checkLR); // ขวา , ซ้าย , บน
 			if (energyballs[i].GetPosition().x >= window.getSize().x - 40.0f || energyballs[i].GetPosition().x <= 40.0f || energyballs[i].GetPosition().y <= 60.0f + 30.0f) {
 				energyballs.erase(energyballs.begin() + i);
 				shootTimer++;
 			}
+			else {
+				// batboss - energyball
+				for (size_t j = 0; j < energyballs.size(); j++) {
+					Collider energyballCollider = energyballs[j].GetCollider();
+					if (batboss.GetCollider().CheckCollision(energyballCollider)) {
+						energyballs.erase(energyballs.begin() + i);
+						batboss.Update(elapsedTime,rand()%281-140.0f);
+						*ptrScore += 50;
+						*ptrBossHP -= 20;
+						*ptrminionSpeed += 10;
+						shootTimer++;
+						UpdateScore(&ssScore, ptrScore);
+						UpdateScore(&ssMegaHP, ptrMegaHP);
+					}
+				}
+			}
 		}
 
 		if (spawnMinion[0]) {
-			minionsLeft.push_back(Minion(&groundMinionRightTexture, sf::Vector2f(65.0f, 730.0f), sf::Vector2f(80.0f, 100.0f), 80.0f));
+			minionsLeft.push_back(Minion(&groundMinionRightTexture, sf::Vector2f(65.0f, 730.0f), sf::Vector2f(80.0f, 100.0f), 120.0f));
 			spawnMinion[0] = false;
 		}
 		if (spawnMinion[1] ) {
-			minionsRight.push_back(Minion(&groundMinionLeftTexture, sf::Vector2f(640.0f, 730.0f), sf::Vector2f(80.0f, 100.0f), 80.0f));
+			minionsRight.push_back(Minion(&groundMinionLeftTexture, sf::Vector2f(640.0f, 730.0f), sf::Vector2f(80.0f, 100.0f), 120.0f));
 			spawnMinion[1] = false;
 		}
 		if (spawnMinion[2] ) {
-			minionsUp1.push_back(Minion(&AirMinion01Texture, sf::Vector2f(655.0f, std::rand() % 141 + 490.0f), sf::Vector2f(70.0f, 50.0f), 80.0f));
+			minionsUp1.push_back(Minion(&AirMinion01Texture, sf::Vector2f(655.0f, std::rand() % 141 + 490.0f), sf::Vector2f(70.0f, 50.0f), *ptrminionSpeed));
 			spawnMinion[2] = false;
 		}
 		if (spawnMinion[3]) {
-			minionsUp2.push_back(Minion(&AirMinion02Texture, sf::Vector2f(60.0f, std::rand() % 141 + 360.0f), sf::Vector2f(70.0f, 70.0f), 80.0f));
+			minionsUp2.push_back(Minion(&AirMinion02Texture, sf::Vector2f(60.0f, std::rand() % 141 + 360.0f), sf::Vector2f(70.0f, 70.0f), *ptrminionSpeed));
 			spawnMinion[3] = false;
 		}
+
 		megaman.Update(elapsedTime, window);
-		batboss.Update(elapsedTime, window);
+		batboss.Update(elapsedTime,0.0f);
 		sf::Vector2f direction;
 		Collider megamanCollider = megaman.GetCollider();
 		window.clear();
@@ -181,20 +249,33 @@ int main() {
 		}
 		for (size_t i = 0; i < minionsLeft.size(); i++) {
 			minionsLeft[i].Update(elapsedTime);
-			if (minionsLeft[i].GetPosition().x >= window.getSize().x - 75 || minionsLeft[i].GetCollider().CheckCollision(megamanCollider)) {
+			// minionleft - corner / megaman
+			if (minionsLeft[i].GetPosition().x >= window.getSize().x - 75) {
 				minionsLeft.erase(minionsLeft.begin() + i);
-				spawnMinion[0] = true;
+				//spawnMinion[0] = true;
 				//	spawnNum = (spawnNum + 1) % 4;
 				//	printf("%d", spawnNum);
 			}
+			else if(minionsLeft[i].GetCollider().CheckCollision(megamanCollider)) {
+				minionsLeft.erase(minionsLeft.begin() + i);
+				*ptrScore -= 20;
+				*ptrMegaHP -= 20;
+				UpdateScore(&ssScore, ptrScore);
+				UpdateScore(&ssMegaHP, ptrMegaHP);
+			}
 				else {
+				// minionleft - energyball
 					for (size_t j = 0; j < energyballs.size(); j++) {
 						Collider energyballCollider = energyballs[j].GetCollider();
 						if (minionsLeft[i].GetCollider().CheckCollision(energyballCollider)) {
 							minionsLeft.erase(minionsLeft.begin() + i);
 							energyballs.erase(energyballs.begin() + j);
-							spawnMinion[0] = true;
+							//spawnMinion[0] = true;
+							*ptrScore += 20;
 							shootTimer++;
+							*ptrenCount += 1;
+							*ptrminionSpeed += 5;
+							UpdateScore(&ssScore, ptrScore);
 						}
 					}
 				}
@@ -204,19 +285,32 @@ int main() {
 		}
 		for (size_t i = 0; i < minionsRight.size(); i++) {
 			minionsRight[i].Update(elapsedTime);
-				if (minionsRight[i].GetPosition().x <= 60 || minionsRight[i].GetCollider().CheckCollision(megamanCollider)) {
+			// minionright - corner / megaman
+				if (minionsRight[i].GetPosition().x <= 60 ) {
 					minionsRight.erase(minionsRight.begin() + i);
-					spawnMinion[1] = true;
+					//spawnMinion[1] = true;
 					//	printf("%d", spawnNum);
 				}
+				else if (minionsRight[i].GetCollider().CheckCollision(megamanCollider)) {
+					minionsRight.erase(minionsRight.begin() + i);
+					*ptrScore -= 20;
+					*ptrMegaHP -= 20;
+					UpdateScore(&ssScore, ptrScore);
+					UpdateScore(&ssMegaHP, ptrMegaHP);
+				}
 				else {
+					// minionleft - energyball
 					for (size_t j = 0; j < energyballs.size(); j++) {
 						Collider energyballCollider = energyballs[j].GetCollider();
 						if (minionsRight[i].GetCollider().CheckCollision(energyballCollider)) {
 							minionsRight.erase(minionsRight.begin() + i);
 							energyballs.erase(energyballs.begin() + j);
-							spawnMinion[1] = true;
+							//spawnMinion[1] = true;
+							*ptrScore += 20;
 							shootTimer++;
+							*ptrenCount += 1;
+							*ptrminionSpeed += 5;
+							UpdateScore(&ssScore, ptrScore);
 						}
 					}
 				}
@@ -226,20 +320,35 @@ int main() {
 		}
 		for (size_t i = 0; i <  minionsUp1.size(); i++) {
 			minionsUp1[i].Update(elapsedTime);
-				if (minionsUp1[i].GetPosition().x <= 60 || minionsUp1[i].GetCollider().CheckCollision(megamanCollider)) {
+			// minionup1 - corner / megaman
+				if (minionsUp1[i].GetPosition().x <= 60 ) {
 					minionsUp1.erase(minionsUp1.begin() + i);
 					spawnMinion[2] = true;
 					//	printf("%d", spawnNum);
 				}
+				else if (minionsUp1[i].GetCollider().CheckCollision(megamanCollider)) {
+					minionsUp1.erase(minionsUp1.begin() + i);
+					spawnMinion[2] = true;
+					*ptrScore -= 20;
+					*ptrMegaHP -= 20;
+					UpdateScore(&ssScore, ptrScore);
+					UpdateScore(&ssMegaHP, ptrMegaHP);
+				}
 				else {
+					// minionup1 - energyball
 					for (size_t j = 0; j < energyballs.size(); j++) {
 						Collider energyballCollider = energyballs[j].GetCollider();
 						if (minionsUp1[i].GetCollider().CheckCollision(energyballCollider)) {
 							minionsUp1.erase(minionsUp1.begin() + i);
 							energyballs.erase(energyballs.begin() + j);
 							spawnMinion[2] = true;
+							*ptrScore += 20;
 							shootTimer++;
+							*ptrenCount += 1;
+							*ptrminionSpeed += 5;
+							UpdateScore(&ssScore, ptrScore);
 						}
+
 					}
 				}
 		}
@@ -248,23 +357,54 @@ int main() {
 		}
 		for (size_t i = 0; i < minionsUp2.size(); i++) {
 			minionsUp2[i].Update(elapsedTime);
-				if (minionsUp2[i].GetPosition().x >= window.getSize().x - 70 || minionsUp2[i].GetCollider().CheckCollision(megamanCollider)) {
+			// minionup2 - corner / megaman
+				if (minionsUp2[i].GetPosition().x >= window.getSize().x - 70) {
 					minionsUp2.erase(minionsUp2.begin() + i);
 					spawnMinion[3] = true;
 
 					//	printf("%d", spawnNum);
 				}
+				else if (minionsUp2[i].GetCollider().CheckCollision(megamanCollider)) {
+					minionsUp2.erase(minionsUp2.begin() + i);
+					spawnMinion[3] = true;
+					*ptrScore -= 20;
+					*ptrMegaHP -= 20;
+					UpdateScore(&ssScore, ptrScore);
+					UpdateScore(&ssMegaHP, ptrMegaHP);
+				}
 				else {
+					// minionup2 - energyball
 					for (size_t j = 0; j < energyballs.size(); j++) {
 						Collider energyballCollider = energyballs[j].GetCollider();
 						if (minionsUp2[i].GetCollider().CheckCollision(energyballCollider)) {
 							minionsUp2.erase(minionsUp2.begin() + i);
 							energyballs.erase(energyballs.begin() + j);
 							spawnMinion[3] = true;
+							*ptrScore += 20;
 							shootTimer++;
+							*ptrenCount += 1;
+							*ptrminionSpeed += 5;
+							UpdateScore(&ssScore, ptrScore);
 						}
 					}
 				}
+		}
+		if(*ptrenCount==5){
+			int randomItems = rand() % 3 + 1;
+			//int dataItem[colldataitem]
+			sf::Vector2f randomSpawnItems(rand() %615 + 35.0f, rand() % 201 + 200.0f);
+			switch (randomItems){
+				case 1:
+					HPItem.push_back(Items(&HPTexture,randomSpawnItems, sf::Vector2f(40.0f, 40.0f)));
+					break;
+				case 2:
+					coinItem.push_back(Items(&coinTexture, randomSpawnItems, sf::Vector2f(40.0f, 40.0f)));
+					break;
+				case 3:
+					trapItem.push_back(Items(&TrapTexture, randomSpawnItems, sf::Vector2f(40.0f, 40.0f)));
+					break;
+			}
+			*ptrenCount = 0;
 		}
 			//window.draw(ground);
 			//window.draw(leftWall);
@@ -273,9 +413,67 @@ int main() {
 			for (size_t i = 0; i < energyballs.size(); i++) {
 					energyballs[i].Draw(window);
 				}
-			megaman.Draw(window);
+			for (size_t i = 0; i < HPItem.size(); i++) {
+				HPItem[i].Draw(window);
+			}
+			// HP - energyball
+			for (size_t i = 0; i < HPItem.size(); i++) {
+				for (size_t j = 0; j < energyballs.size(); j++) {
+					Collider energyballCollider = energyballs[j].GetCollider();
+					if (HPItem[i].GetCollider().CheckCollision(energyballCollider)) {
+						HPItem[i].Update(elapsedTime,1,ptrScore);
+						HPItem.erase(HPItem.begin() + i);
+						energyballs.erase(energyballs.begin() + j);
+						shootTimer++;
+						*ptrScore += 20;
+						*ptrMegaHP += 20;
+						UpdateScore(&ssScore, ptrScore);
+						UpdateScore(&ssMegaHP, ptrMegaHP);
+					}
+				}
+			}
+			for (size_t i = 0; i < coinItem.size(); i++) {
+				coinItem[i].Draw(window);
+			}
+			// Coin - energyball
+			for (size_t i = 0; i < coinItem.size(); i++) {
+				for (size_t j = 0; j < energyballs.size(); j++) {
+					Collider energyballCollider = energyballs[j].GetCollider();
+					if (coinItem[i].GetCollider().CheckCollision(energyballCollider)) {
+						coinItem[i].Update(elapsedTime, 2, ptrScore);
+						coinItem.erase(coinItem.begin() + i);
+						energyballs.erase(energyballs.begin() + j);
+						shootTimer++;
+						*ptrScore += 20;
+						UpdateScore(&ssScore, ptrScore);
+					}
+				}
+			}
+			for (size_t i = 0; i < trapItem.size(); i++) {
+				trapItem[i].Draw(window);
+			}
+			// Trap - energyball
+			for (size_t i = 0; i < trapItem.size(); i++) {
+				for (size_t j = 0; j < energyballs.size(); j++) {
+					Collider energyballCollider = energyballs[j].GetCollider();
+					if (trapItem[i].GetCollider().CheckCollision(energyballCollider)) {
+						trapItem[i].Update(elapsedTime, 3, ptrScore);
+						trapItem.erase(trapItem.begin() + i);
+						energyballs.erase(energyballs.begin() + j);
+						spawnMinion[0] = true;
+						spawnMinion[1] = true;
+						shootTimer++;
+						*ptrScore -= 20;
+						UpdateScore(&ssScore, ptrScore);
+					}
+				}
+			}
 			batboss.Draw(window);
+			megaman.Draw(window);
+			window.draw(TextScore);
+			window.draw(MegaHP);
+			window.draw(BossHP);
 			window.display();
-		}
+	}
 		return 0;
 }
