@@ -21,6 +21,11 @@ void Items::Update(float elapsedTime,int itemSlot,int *score) {
 	}
 	
 }
+void Items::Move(float elapsedTime){
+	velocity.x = 0.0f;
+	velocity.y = 200.0f;
+	return body.move(velocity * elapsedTime);
+}
 
 void Items::Draw(sf::RenderWindow& window) {
 	window.draw(body);

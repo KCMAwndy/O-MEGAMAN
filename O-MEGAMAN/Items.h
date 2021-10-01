@@ -8,6 +8,7 @@ class Items
 public:
 	Items(sf::Texture* texture, sf::Vector2f position, sf::Vector2f size);
 	void Update(float elapsedTime, int itemSlot, int* score);
+	void Move(float elapsedTime);
 	void Draw(sf::RenderWindow& window);
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
@@ -17,4 +18,5 @@ public:
 	}
 private:
 	sf::RectangleShape body;
+	sf::Vector2f velocity;
 };

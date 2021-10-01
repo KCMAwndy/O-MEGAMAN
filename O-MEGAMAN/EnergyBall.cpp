@@ -12,13 +12,13 @@ EnergyBall::EnergyBall(sf::Texture* texture,sf::Vector2f position, sf::Vector2f 
 
 void EnergyBall::Update(float elapsedTime, sf::RenderWindow& window,std::vector<class EnergyBall> energyballs,bool checkUP, int checkBott,bool checkLR) {
 	if (checkLR && checkUP==false){
-		velocity.x = 250.0f ;
+		velocity.x = speed;
 	}
 	else if (checkUP&&checkLR==false) {
-		velocity.y = 250.0f*checkBott;
+		velocity.y = speed *checkBott;
 	}
 	else {
-		velocity.x = -250.0f;
+		velocity.x = -speed;
 	}
 	//if (body.getPosition().x <= 20)		//LEFT
 	//	body.setPosition(sf::Vector2f(20.0f, body.getPosition().y));		
