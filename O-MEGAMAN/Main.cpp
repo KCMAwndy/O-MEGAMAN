@@ -1,9 +1,13 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<SFML\Graphics.hpp>
+#include<stdio.h>
 #include<iostream>
+#include<string>
 #include<sstream>
 #include<vector>
 #include<cstdlib>
 #include<ctime>
+#include<fstream>
 #include"Animation.h"
 #include"Megaman.h"
 #include"Collider.h"
@@ -26,8 +30,14 @@ void UpdateScore(std::ostringstream *pscore,int *score) {
 	*pscore << *score;
 }
 
+struct score {
+	std::string Plr;
+	int Scr;
+};
+struct score ScBoard[5];
 
 int main() {
+	std::srand(time(NULL));
 	bool Screen[5] = { true,false,false,false,false };
 	int enCount=0,score=0,megaHP=100,bossHp=500,minionSpeed=80,enballSpeed=250;
 	int spawncount = 5;
@@ -43,6 +53,9 @@ int main() {
 	bool boolenball = true;
 	bool spawnbossBall = false;
 	bool despawnMinionUp1 = false;
+	bool playerEnter = true;
+	bool GameOver = false;
+	char temp[256] = {" "};
 	//float spawnNum = 0.0f;
 	//printf("HELLO ME NA");
 	sf::RenderWindow window(sf::VideoMode(720, 960), "O-MEGAMAN GAME", sf::Style::Close | sf::Style::Resize);
@@ -104,8 +117,13 @@ int main() {
 	ssMegaHP << *ptrMegaHP;
 	std::ostringstream ssBossHP;
 	ssBossHP << *ptrBossHP;
+	std::ostringstream ssResult;
+	ssResult << "Your Score : " ;
+	std::ostringstream ssplName;
+	ssplName << "Ener your name ";
+	std::ostringstream ssdisScore;
+	ssdisScore << *ptrScore;
 	
-	std::srand(time(NULL));
 	//printf("%d\n", std::rand() % 191 + 370);
 	//minions.push_back(Minion(&groundMinionRightTexture,sf::Vector2f(25.0f, 680.0f), sf::Vector2f(80.0f, 100.0f), 200.0f));
 	//minions.push_back(Minion(&groundMinionLeftTexture,sf::Vector2f(615.0f, 680.0f), sf::Vector2f(80.0f, 100.0f),200.0f));
@@ -165,37 +183,116 @@ int main() {
 	SB.setTexture(SBTexture);
 	SB.setPosition(0.0f, 0.0f);
 
-	sf::Text Back;
-	sf::Text Next;
+sf::Texture winTexture;
+sf::Sprite win;
+winTexture.loadFromFile("Images/Youwin.png");
+win.setTexture(winTexture);
+win.setPosition(0.0f, 0.0f);
 
-	//float spawnTime = 0.0f;
-	float elapsedTime = 0.0f;
-	double bossEnBallTime = 0.0f;
-	double despawnTime = 0.0f;
-	//if (Screen[3]) 
-	//}
+sf::Texture GameoverTexture;
+sf::Sprite Gameover;
+GameoverTexture.loadFromFile("Images/Gameover.png");
+Gameover.setTexture(GameoverTexture);
+Gameover.setPosition(0.0f, 0.0f);
 
-	sf::Clock clock;
-	sf::Clock spawnClock;
+int order = 0;
 
-	printf("%f", elapsedTime);
-		while (window.isOpen()) {
-			sf::Event evnt;
-			while (window.pollEvent(evnt)) {
-				int x = sf::Mouse::getPosition(window).x;
-				int y = sf::Mouse::getPosition(window).y;
-				switch (evnt.type) {
-				case sf::Event::Closed:
-					window.close();
-					break;
-				case sf::Event::Resized:
-					ResizeView(window);
-					break;
-				case sf::Event::MouseButtonPressed:
-					printf("%d,%d\n", x, y);
-					break;
+sf::Text Back;
+sf::Text Next;
+
+sf::String playerInput;
+sf::Text playerText;
+
+std::string playerName;
+
+//float spawnTime = 0.0f;
+float elapsedTime = 0.0f;
+double bossEnBallTime = 0.0f;
+double despawnTime = 0.0f;
+//if (Screen[3]) 
+//}
+//std::ofstream writefile;
+//writefile.open("Score_Board.txt",std::ios::app);
+
+std::ifstream inputFile;
+std::ofstream outputFile;
+
+sf::Clock clock;
+sf::Clock spawnClock;
+
+printf("%f", elapsedTime);
+while (window.isOpen()) {
+	sf::Event evnt;
+	while (window.pollEvent(evnt)) {
+		int x = sf::Mouse::getPosition(window).x;
+		int y = sf::Mouse::getPosition(window).y;
+		switch (evnt.type) {
+		case sf::Event::Closed:
+			window.close();
+			break;
+		case sf::Event::Resized:
+			ResizeView(window);
+			break;
+		case sf::Event::MouseButtonPressed:
+			printf("%d,%d\n", x, y);
+			break;
+		}
+		if (Screen[4]) {
+			int ScrInt, j = 0, tempScore, order, tempScore2;
+			std::string PlrString, tmpName, tmpName2;
+			playerText.setCharacterSize(50);
+			playerText.setFont(menuFont);
+			playerText.setFillColor(sf::Color::Yellow);
+			playerText.setPosition(210.0f, 505.0f);
+			if (evnt.type == sf::Event::TextEntered) {
+				if (evnt.text.unicode < 128 && playerEnter) {
+					playerInput += evnt.text.unicode;
+					playerText.setString(playerInput);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && playerEnter) {
+					playerName = playerInput;
+					//Scoretemp = *ptrScore;
+					//std::cout << playerName << std::endl;
+					playerEnter = false;
+					inputFile.open("Score_Board.txt");
+					if (inputFile.is_open()) {
+						while (!inputFile.eof()) {
+							inputFile >> PlrString >> ScrInt;
+							ScBoard[j].Plr = PlrString;
+							ScBoard[j].Scr = ScrInt;
+							j++;
+						}
+						inputFile.close();
+					}
+					for (int i = 0; i < 5; i++) {
+						if (ScBoard[i].Scr < *ptrScore) {
+							tmpName = ScBoard[i].Plr;
+							tempScore = ScBoard[i].Scr;
+							ScBoard[i].Scr = *ptrScore;
+							ScBoard[i].Plr = playerName;
+							order = i;
+							for (int j = order + 1; j < 5; j++) {
+								tmpName2 = ScBoard[j].Plr;
+								tempScore2 = ScBoard[j].Scr;
+								ScBoard[j].Plr = tmpName;
+								ScBoard[j].Scr = tempScore;
+								tmpName = tmpName2;
+								tempScore = tempScore2;
+								i++;
+							}
+						}
+					}
+					outputFile.open("Score_Board.txt");
+					if (outputFile.is_open()) {
+						for (int i = 0; i < 5; i++) {
+							outputFile << ScBoard[i].Plr << " " << ScBoard[i].Scr << std::endl;
+						}
+						outputFile.close();
+					}
 				}
 			}
+		}
+	}
 			//printf("%f", elapsedTime);
 			if (Screen[0]) {
 				clock.restart();
@@ -280,6 +377,7 @@ int main() {
 						}
 					}
 				}
+				
 				window.clear();
 				window.draw(SB);
 				window.draw(Back);
@@ -330,6 +428,7 @@ int main() {
 						Screen[3] = true;
 					}
 				}
+				
 				window.clear();
 				window.draw(HTP);
 				window.draw(Back);
@@ -787,9 +886,18 @@ int main() {
 						}
 					}
 				}
-				//if (*ptrMegaHP == 0) {
-				//	break;
-				//}
+				if (*ptrMegaHP <= 0) {
+					*ptrMegaHP = 100;
+					Screen[3] = false;
+					Screen[4] = true;
+					GameOver = true;
+				}
+				else if (*ptrBossHP <= 0) {
+					*ptrBossHP = 500;
+					Screen[3] = false;
+					Screen[4] = true;
+					GameOver = false;
+				}
 				batboss.Draw(window);
 				megaman.Draw(window);
 				window.draw(TextScore);
@@ -802,17 +910,36 @@ int main() {
 				clock.restart();
 				spawnClock.restart();
 
-				Back.setFont(menuFont);
-				Back.setString("BACK");
-				//menuText[0].setFillColor(sf::Color::White);
-				Back.setCharacterSize(50);
-				Back.setPosition(50.0f, 885.0f);
+				sf::Text textScore;
+				sf::Text yourScore;
+				textScore.setCharacterSize(40);
+				textScore.setPosition(195.0f, 235.0f);
+				textScore.setFont(scoreFont);
+				textScore.setFillColor(sf::Color::Red);
+				textScore.setString(ssResult.str());
 
-				Next.setFont(menuFont);
-				Next.setString("EXIT");
-				//menuText[1].setFillColor(sf::Color::White);
-				Next.setCharacterSize(50);
-				Next.setPosition(565.0f, 885.0f);
+
+				
+				yourScore.setCharacterSize(40);
+				yourScore.setPosition(495.0f, 235.0f);
+				yourScore.setFont(scoreFont);
+				yourScore.setFillColor(sf::Color::Red);
+				yourScore.setString(ssdisScore.str());
+				UpdateScore(&ssdisScore, ptrScore);
+
+
+
+				sf::Text yourName;
+				yourName.setCharacterSize(40);
+				yourName.setPosition(180.0f, 340.0f);
+				yourName.setFont(scoreFont);
+				yourName.setString(ssplName.str());
+
+				Back.setFont(menuFont);
+				Back.setString("BACK TO MAIN MENU");
+				//menuText[0].setFillColor(sf::Color::White);
+				Back.setCharacterSize(40);
+				Back.setPosition(70.0f, 630.0f);
 
 				if (Back.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
 					Back.setFillColor(sf::Color::Cyan);
@@ -822,32 +949,29 @@ int main() {
 					Back.setFillColor(sf::Color::White);
 					Back.setStyle(0);
 				}
-				if (Next.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
-					Next.setFillColor(sf::Color::Cyan);
-					Next.setStyle(sf::Text::Italic);
-				}
-				else {
-					Next.setFillColor(sf::Color::White);
-					Next.setStyle(0);
-				}
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 					if (Back.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
 						if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-							Screen[2] = false;
+							Screen[4] = false;
 							Screen[0] = true;
 						}
 					}
-					if (Next.getGlobalBounds().contains(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) {
-						Screen[2] = false;
-						Screen[3] = true;
-					}
 				}
+
 				window.clear();
-				window.draw(HTP);
+				if (GameOver) {
+					window.draw(Gameover);
+				}
+				else {
+					window.draw(win);
+				}
+				window.draw(playerText);
+				window.draw(textScore);
+				window.draw(yourName);
+				window.draw(yourScore);
 				window.draw(Back);
-				window.draw(Next);
 				window.display();
 			}
-		}
-		return 0;
+	}
+	return 0;
 }
