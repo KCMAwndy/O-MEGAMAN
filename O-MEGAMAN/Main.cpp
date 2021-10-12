@@ -29,7 +29,7 @@ void UpdateScore(std::ostringstream *pscore,int *score) {
 	pscore->str(" ");
 	*pscore << *score;
 }
-
+void ShowOderScore(sf::RenderWindow& window, sf::Text ScrOder[]);
 struct score {
 	std::string Plr;
 	int Scr;
@@ -354,6 +354,12 @@ while (window.isOpen()) {
 				clock.restart();
 				spawnClock.restart();
 
+				int ScrInt, j = 0;
+				sf::Text ScrOder[5];
+				std::ostringstream ssScrOder[5];
+				std::string PlrString;
+				inputFile.open("Score_Board.txt");
+
 				Back.setFont(menuFont);
 				Back.setString("BACK");
 				//menuText[0].setFillColor(sf::Color::White);
@@ -377,10 +383,26 @@ while (window.isOpen()) {
 						}
 					}
 				}
-				
+				if (inputFile.is_open()) {
+					while (!inputFile.eof()) {
+						inputFile >> PlrString >> ScrInt;
+						ScBoard[j].Plr = PlrString;
+						ScBoard[j].Scr = ScrInt;
+						j++;
+					}
+					inputFile.close();
+				}
+				for (int i = 0; i < 5; i++) {
+					ScrOder[i].setFont(menuFont);
+					ScrOder[i].setCharacterSize(50);
+					ScrOder[i].setPosition(150.0f, 240.0f + (80.0f * i));
+					ssScrOder[i] << ScBoard[i].Plr << "\t" << ScBoard[i].Scr;
+					ScrOder[i].setString(ssScrOder[i].str());
+				}
 				window.clear();
 				window.draw(SB);
 				window.draw(Back);
+				ShowOderScore(window, ScrOder);
 				window.display();
 			}
 
@@ -428,7 +450,7 @@ while (window.isOpen()) {
 						Screen[3] = true;
 					}
 				}
-				
+
 				window.clear();
 				window.draw(HTP);
 				window.draw(Back);
@@ -974,4 +996,10 @@ while (window.isOpen()) {
 			}
 	}
 	return 0;
+}
+void ShowOderScore(sf::RenderWindow& window,sf::Text ScrOder[]) {
+
+	for (int i = 0; i < 5; i++) {
+		window.draw(ScrOder[i]);
+	}
 }
