@@ -152,6 +152,7 @@
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Megaman.cpp" />
+    <ClCompile Include="MiniBoss.cpp" />
     <ClCompile Include="Minion.cpp" />
     <ClCompile Include="Platform.cpp" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <ClInclude Include="EnergyBall.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="Megaman.h" />
+    <ClInclude Include="MiniBoss.h" />
     <ClInclude Include="Minion.h" />
     <ClInclude Include="Platform.h" />
   </ItemGroup>

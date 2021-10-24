@@ -18,6 +18,7 @@ public:
 		return Collider(body);
 	}
 	Collider CheckCollision(Collider& other, sf::Vector2f direction, float push);
+	bool faceRight;
 //	bool CheckLR(std::vector<class Minion> minions,int i);
 private:
 	sf::RectangleShape body;
@@ -25,4 +26,6 @@ private:
 	float speed;
 	sf::Vector2f velocity;
 	float collectPostition;
+	float collectTime;
+	sf::Clock delay;
 };

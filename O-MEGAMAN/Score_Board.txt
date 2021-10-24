@@ -1,5 +1,5 @@
-toon 300
-you 140
-woe 40
-ron 40
-a 0
+hpp 1390
+ken 420
+yoob 360
+toon 300
+tony 160

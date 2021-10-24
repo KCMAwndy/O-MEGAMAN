@@ -19,8 +19,12 @@ void Items::Update(float elapsedTime,int itemSlot,int *score) {
 		*score -= 20;
 		break;
 	}
-	
 }
+void Items::movementUpdate(sf::Vector2f megamanPosition)
+{
+	body.setPosition(megamanPosition);
+}
+
 void Items::Move(float elapsedTime){
 	velocity.x = 0.0f;
 	velocity.y = 200.0f;
