@@ -14,6 +14,9 @@ public:
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
 	}
+	sf::Vector2f GetOrigin() {
+		return body.getOrigin();
+	}
 	Collider GetCollider() {
 		return Collider(body);
 	}

@@ -98,6 +98,20 @@ void Megaman::Draw(sf::RenderWindow& window) {
 	window.draw(body);
 }
 
+void Megaman::Hit(float elapsedTime,float scale)
+{
+	canjump = false;
+	velocity.y = scale;
+	body.move(velocity * elapsedTime);
+}
+
+void Megaman::SetPosition(float x, float y)
+{
+	body.setPosition(x, y);
+}
+
+
+
 //void Megaman::OnCollision(sf::Vector2f direction)
 //{
 //	if (direction.x < 0.0f) {

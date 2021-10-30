@@ -11,6 +11,8 @@ public:
 	Megaman(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed, float jumpHeight);
 	void Update(float elapsedTime, sf::RenderWindow& window);
 	void Draw(sf::RenderWindow& window);
+	void Hit(float elapsedTime, float scale);
+	void SetPosition(float x, float y);
 	//void OnCollision(sf::Vector2f direction);
 	//std::vector<class EnergyBall>	energyballs;
 	sf::Vector2f GetPosition() {

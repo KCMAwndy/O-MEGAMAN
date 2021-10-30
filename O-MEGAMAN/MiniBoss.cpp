@@ -24,6 +24,7 @@ void MiniBoss::Hunt(float elapsedTime)
 {
 	velocity.x = -speed;
 	if (body.getPosition().x <= 60.0f) {
+		animation.UpdateMiniBoss(2);
 		speed = -200;
 		//printf("\n\n\n\n%f", speed);
 		body.setPosition(body.getPosition().x+5.0f, body.getPosition().y + 100.0f);
@@ -31,10 +32,11 @@ void MiniBoss::Hunt(float elapsedTime)
 	printf("\n\n\n\n%f", speed);
 	if (body.getPosition().x >= 670.0f) {
 		speed = 200;
+		animation.UpdateMiniBoss(3);
 		body.setPosition(body.getPosition().x-5.0f, body.getPosition().y + 100.0f);
 	}
 	row = 0;
-	animation.UpdateMiniBoss(2);
+	//animation.UpdateMiniBoss(2);
 	body.setTextureRect(animation.currentRect);
 	body.move(velocity*elapsedTime);
 }

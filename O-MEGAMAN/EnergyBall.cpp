@@ -30,6 +30,29 @@ void EnergyBall::Update(float elapsedTime, sf::RenderWindow& window,std::vector<
 	body.move(velocity * elapsedTime);
 }
 
+void EnergyBall::FollowUpdate(float elapsedTime, sf::Vector2f megamanPosition)
+{
+	velocity.x = (megamanPosition.x - body.getPosition().x);
+	//velocity.y = (megamanPosition.y - body.getPosition().y);
+	velocity.y = speed;
+	body.move(velocity * elapsedTime);
+}
+
+void EnergyBall::parabolaUpdtae(float elapsedTime,int face)
+{
+	velocity.x = 50 * face;
+	//velocity.y = (megamanPosition.y - body.getPosition().y);
+	velocity.y = speed;
+	body.move(velocity * elapsedTime);
+}
+
+void EnergyBall::strikeUpdate(float elapsedTime, float x)
+{
+	velocity.x = x;
+	velocity.y = speed;
+	body.move(velocity * elapsedTime);
+}
+
 	void EnergyBall::Draw(sf::RenderWindow& window) {
 	window.draw(body);
 }
