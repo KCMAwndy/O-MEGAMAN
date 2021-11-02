@@ -34,13 +34,20 @@ BatBoss::BatBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime
 	//}
 //}
 
-void BatBoss::Update(float elapsedTime,float movement) {
+void BatBoss::Update(float elapsedTime,float movement, bool dead) {
+	if (dead) {
+	row = 1;
+	animation.limitUpdate(row, elapsedTime,false);
+	body.setTextureRect(animation.currentRect);
+	}
+	else {
 	velocity.y = 0.0f;
 	velocity.x = movement;
 	row = 0;
 	animation.UpdateBoss(row, elapsedTime);
 	body.setTextureRect(animation.currentRect);
 	body.move(velocity);
+	}
 }
 
 

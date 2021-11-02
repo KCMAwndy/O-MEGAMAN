@@ -16,7 +16,7 @@ Megaman::Megaman(sf::Texture* texture, sf::Vector2u imageCount, float switchTime
 	body.setTexture(texture);
 }
 
-void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
+void Megaman::Update(float elapsedTime, sf::RenderWindow& window, bool iceHit, bool fireHit, bool dead){
 
 	//energyballRightTexture.loadFromFile("Images/EnergyBallRight.png");
 	//energyballLeftTexture.loadFromFile("Images/EnergyBallleft.png");
@@ -43,42 +43,78 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window){
 
 	}
 	*/
-	velocity.x = 0.0f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		velocity.x -= speed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		velocity.x += speed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && canjump) {
-		canjump = false;
-		velocity.y = -sqrtf(2.0f * 981.0f * jumpHeight);
-	}
-
-	//if(shootTimer<3)	shootTimer++;
-	/*
-	for (size_t i = 0; i < energyballs.size(); i++) {
-		energyballs[i].Update(elapsedTime, window, energyballs,checkUP, checkBott ,checkLR); // ขวา , ซ้าย , บน
-		if (energyballs[i].GetPosition().x >= window.getSize().x - 40.0f || energyballs[i].GetPosition().x <= 40.0f || energyballs[i].GetPosition().y <= 60.0f+30.0f ) {
-			energyballs.erase(energyballs.begin() + i);
-			shootTimer++;
-		}
-	}
-	*/
-	velocity.y += 981.0f * elapsedTime;
-	if (velocity.x == 0.0f)
-		row = 0;
-	else {
-		row = 1;
+	if (iceHit) {
+		row = 2;
 		if (velocity.x > 0.0f) {
 			faceRight = true;
 		}
 		else {
 			faceRight = false;
 		}
+		animation.limitUpdate(row, elapsedTime,faceRight);
+		body.setTextureRect(animation.currentRect);
 	}
-	animation.Update(row, elapsedTime, faceRight);
-	body.setTextureRect(animation.currentRect);
-	body.move(velocity * elapsedTime);
+	else if(fireHit) {
+		row = 3;
+		velocity.y = -30.0f;
+		body.move(velocity * elapsedTime);
+			if (velocity.x > 0.0f) {
+				faceRight = true;
+			}
+			else {
+				faceRight = false;
+			}
+		animation.limitUpdate(row, elapsedTime, faceRight);
+		body.setTextureRect(animation.currentRect);
+	}
+	else if (dead) {
+		row = 4;
+		if (velocity.x > 0.0f) {
+			faceRight = true;
+		}
+		else {
+			faceRight = false;
+		}
+		animation.limitUpdate(row, elapsedTime, faceRight);
+		body.setTextureRect(animation.currentRect);
+	}
+	else {
+		velocity.x = 0.0f;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			velocity.x -= speed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			velocity.x += speed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && canjump) {
+			canjump = false;
+			velocity.y = -sqrtf(2.0f * 981.0f * jumpHeight);
+		}
 
+		//if(shootTimer<3)	shootTimer++;
+		/*
+		for (size_t i = 0; i < energyballs.size(); i++) {
+			energyballs[i].Update(elapsedTime, window, energyballs,checkUP, checkBott ,checkLR); // ขวา , ซ้าย , บน
+			if (energyballs[i].GetPosition().x >= window.getSize().x - 40.0f || energyballs[i].GetPosition().x <= 40.0f || energyballs[i].GetPosition().y <= 60.0f+30.0f ) {
+				energyballs.erase(energyballs.begin() + i);
+				shootTimer++;
+			}
+		}
+		*/
+		velocity.y += 981.0f * elapsedTime;
+		if (velocity.x == 0.0f)
+			row = 0;
+		else {
+			row = 1;
+			if (velocity.x > 0.0f) {
+				faceRight = true;
+			}
+			else {
+				faceRight = false;
+			}
+		}
+		animation.Update(row, elapsedTime, faceRight);
+		body.setTextureRect(animation.currentRect);
+		body.move(velocity * elapsedTime);
+	}
 	if (body.getPosition().x <= body.getOrigin().x + 20.0f)		//LEFT
 		body.setPosition(sf::Vector2f(body.getOrigin().x + 20.0f, body.getPosition().y));
 	if(body.getPosition().x>=window.getSize().x- body.getOrigin().x - 20.0f)	//RIGHT

@@ -1,5 +1,5 @@
-hpp 1390
-ken 420
-yoob 360
+gun 1390
+nan 420
+bub 360
 toon 300
-tony 160
+game 170

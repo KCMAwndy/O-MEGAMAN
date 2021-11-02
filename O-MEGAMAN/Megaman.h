@@ -9,7 +9,7 @@ class Megaman
 {
 public:
 	Megaman(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed, float jumpHeight);
-	void Update(float elapsedTime, sf::RenderWindow& window);
+	void Update(float elapsedTime, sf::RenderWindow& window,bool iceHit,bool fireHit,bool dead);
 	void Draw(sf::RenderWindow& window);
 	void Hit(float elapsedTime, float scale);
 	void SetPosition(float x, float y);

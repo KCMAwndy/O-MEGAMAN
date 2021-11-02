@@ -8,6 +8,7 @@ public:
 	void Update(int row, float elapsedTime, bool faceRight);
 	void UpdateBoss(int row, float elapsedTime);
 	void UpdateMiniBoss(int column);
+	void limitUpdate(int row, float elapsedTime,bool faceRight);
 public:
 	sf::IntRect currentRect;
 private:

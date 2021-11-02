@@ -41,7 +41,7 @@ struct score ScBoard[5];
 int main() {
 	std::srand(time(NULL));
 	bool Screen[5] = { true,false,false,false,false };
-	int enCount=0,score=0,megaHP=100,bossHp=500,minionSpeed=80,enballSpeed=250,iceCount=0;
+	int enCount=0,score=0,megaHP=100,bossHp=5,minionSpeed=80,enballSpeed=250,iceCount=0;
 	int spawncount = 5;
 	int iceBossspwn = 3;
 	int spawnice = 1;
@@ -65,26 +65,30 @@ int main() {
 	bool playerEnter = true;
 	bool GameOver = false;
 	char temp[256] = {" "};
-	float collectTime[4] = { 0.0f,0.0f,0.0f,0.0f };
-	bool boolDelay[4] = { false,false,true,false };
+	float collectTime[8] = { 0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f };
+	bool boolDelay[8] = { false,false,true,false,false,false,false,false };
 	bool boolSheild=false;
 	bool icebossHunt = false;
 	bool iceboosDrop = true;
 	bool iceShoot = false;
 	bool snakeSpawn = true;
 	bool snakeHunt = true;
+	bool iceHit = false;
+	bool fireHit = false;
+	bool dead = false;
+	bool deadBoss = false;
 	//int HMitem[3] = { 0,0,0 };
 	//float spawnNum = 0.0f;
 	//printf("HELLO ME NA");
 	sf::RenderWindow window(sf::VideoMode(720, 960), "O-MEGAMAN GAME", sf::Style::Close | sf::Style::Resize);
 	//	sf::View view(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(VIEW_HEIGHT, VIEW_HEIGHT));
 	sf::Texture megamanTexture;
-	megamanTexture.loadFromFile("Images/Megaman_movement.png");
-	Megaman megaman(&megamanTexture, sf::Vector2u(3, 15), 0.8f, 150.0f, 300.0f);
+	megamanTexture.loadFromFile("Images/Megaman_movement2.png");
+	Megaman megaman(&megamanTexture, sf::Vector2u(3, 5), 0.8f, 150.0f, 300.0f);
 
 	sf::Texture batbossTexture;
-	batbossTexture.loadFromFile("Images/MegaBoss_Movement.png");
-	BatBoss batboss(&batbossTexture, sf::Vector2u(2, 1), 0.9f, sf::Vector2f(360.0f, 140.0f), 150.0f);
+	batbossTexture.loadFromFile("Images/MegaBoss_Movement2.png");
+	BatBoss batboss(&batbossTexture, sf::Vector2u(2, 2), 0.9f, sf::Vector2f(360.0f, 140.0f), 150.0f);
 	sf::Texture iceBossTexture;
 	iceBossTexture.loadFromFile("Images/miniBoss2.png");
 	MiniBoss iceboss(&iceBossTexture, sf::Vector2u(4, 1), 0.9f, sf::Vector2f(360.0f, 240.0f), 200.0f);
@@ -325,6 +329,10 @@ while (window.isOpen()) {
 				clock.restart();
 				spawnClock.restart();
 				delayClock.restart();
+				HuntClock.restart();
+				SnakeClock.restart();
+				minionClock_1.restart();
+				minionClock_2.restart();
 
 				menuText[0].setFont(menuFont);
 				menuText[0].setString("Start");
@@ -383,6 +391,10 @@ while (window.isOpen()) {
 				clock.restart();
 				spawnClock.restart();
 				delayClock.restart();
+				HuntClock.restart();
+				SnakeClock.restart();
+				minionClock_1.restart();
+				minionClock_2.restart();
 
 				int ScrInt, j = 0;
 				sf::Text ScrOder[5];
@@ -440,6 +452,10 @@ while (window.isOpen()) {
 				clock.restart();
 				spawnClock.restart();
 				delayClock.restart();
+				HuntClock.restart();
+				SnakeClock.restart();
+				minionClock_1.restart();
+				minionClock_2.restart();
 
 				Back.setFont(menuFont);
 				Back.setString("BACK");
@@ -700,12 +716,44 @@ while (window.isOpen()) {
 					}
 				}
 
-
-
-
-
-
-
+				if (boolDelay[4]) {
+						//delayClock.restart().asSeconds();
+						collectTime[4] += elapsedTime;
+						if (collectTime[4] >= 5.0f) {
+							boolDelay[4] = false;
+							iceHit = false;
+							collectTime[4] -= 5;
+						}
+				}
+				if (boolDelay[5]) {
+					//delayClock.restart().asSeconds();
+					collectTime[5] += elapsedTime;
+					if (collectTime[5] >= 5.0f) {
+						boolDelay[5] = false;
+						fireHit = false;
+						collectTime[5] -= 5;
+					}
+				}
+				if (boolDelay[6]) {
+					//delayClock.restart().asSeconds();
+					collectTime[6] += elapsedTime;
+					if (collectTime[6] >= 3.0f) {
+						Screen[3] = false;
+						Screen[4] = true;
+						GameOver = true;
+						collectTime[6] -= 3;
+					}
+				}
+				if (boolDelay[7]) {
+					//delayClock.restart().asSeconds();
+					collectTime[7] += elapsedTime;
+					if (collectTime[7] >= 3.0f) {
+						Screen[3] = false;
+						Screen[4] = true;
+						GameOver = false;
+						collectTime[7] -= 3;
+					}
+				}
 
 
 				if (boolSheild) {
@@ -719,7 +767,7 @@ while (window.isOpen()) {
 						collectTime[2] -= 10;
 					}
 				}
-				printf("%d\n", *ptriceCount);
+				//printf("%d\n", *ptriceCount);
 				
 
 				if (spawnMinion[0]) {
@@ -751,7 +799,7 @@ while (window.isOpen()) {
 					int randombatbossSpawn = rand() % ((581 - batbossPositionX) - (batbossPositionX - 140)) - (batbossPositionX - 140.0f);
 					//printf("\n%d %d %d %d", batbossPositionX, randombatbossSpawn, (581 - batbossPositionX) - (batbossPositionX - 140), batbossPositionX - 140);
 					//}
-					batboss.Update(elapsedTime, randombatbossSpawn);
+					batboss.Update(elapsedTime, randombatbossSpawn, deadBoss);
 					//batboss.Update(elapsedTime, megaman.GetPosition().x-batboss.GetPosition().x);
 
 					if (*ptrBossHP <= 150) {
@@ -767,8 +815,8 @@ while (window.isOpen()) {
 				}
 
 
-				megaman.Update(elapsedTime, window);
-				batboss.Update(elapsedTime, 0.0f);
+				megaman.Update(elapsedTime, window,iceHit,fireHit,dead);
+				batboss.Update(elapsedTime, 0.0f,deadBoss);
 
 				if (boolDelay[0] && boolDelay[1]) {
 					if (boolDelay[3]) {
@@ -853,7 +901,7 @@ while (window.isOpen()) {
 				}
 				//printf("\n%lf %d", minionTime[0], minionDropInt[0]);
 				//printf("%d\n", collectSnakeShoot);
-			printf("\n%lf ", collectTime[3]);
+			//printf("\n%lf ", collectTime[3]);
 
 
 
@@ -1060,6 +1108,8 @@ while (window.isOpen()) {
 						icedrop.erase(icedrop.begin() + i);
 						//*ptrScore -= 50;
 						*ptrMegaHP -= 10;
+						iceHit = true;
+						boolDelay[4] = true;
 						//UpdateScore(&ssScore, ptrScore);
 						UpdateScore(&ssMegaHP, ptrMegaHP);
 					}
@@ -1391,7 +1441,11 @@ while (window.isOpen()) {
 						//	printf("%d", spawnNum);
 					}
 					else if (snakeLeftBall[i].GetCollider().CheckCollision(megamanCollider)) {
-						megaman.Hit(elapsedTime,-800.0f);
+						snakeLeftBall.erase(snakeLeftBall.begin() + i);
+						//megaman.SetPosition(megaman.GetPosition().x, megaman.GetPosition().y - 50.0f);
+						boolDelay[5] = true;
+						fireHit = true;
+						//megaman.Hit(elapsedTime,-800.0f);
 						//*ptrMegaHP -= 10;
 						//UpdateScore(&ssMegaHP, ptrMegaHP);
 					}
@@ -1409,8 +1463,12 @@ while (window.isOpen()) {
 						//	spawnNum = (spawnNum + 1) % 4;
 						//	printf("%d", spawnNum);
 					}
-					else if (snakeLeftBall[i].GetCollider().CheckCollision(megamanCollider)) {
-						megaman.Hit(elapsedTime,-1000.0f);
+					else if (snakeRightBall[i].GetCollider().CheckCollision(megamanCollider)) {
+						snakeRightBall.erase(snakeRightBall.begin() + i);
+						//megaman.SetPosition(megaman.GetPosition().x, megaman.GetPosition().y - 50.0f);
+						boolDelay[5] = true;
+						fireHit = true;
+						//megaman.Hit(elapsedTime,-800.0f);
 						//*ptrMegaHP -= 10;
 						//UpdateScore(&ssMegaHP, ptrMegaHP);
 					}
@@ -1434,16 +1492,17 @@ while (window.isOpen()) {
 				}
 
 				if (*ptrMegaHP <= 0) {
-					*ptrMegaHP = 100;
-					Screen[3] = false;
-					Screen[4] = true;
-					GameOver = true;
+					*ptrMegaHP = 0;
+					UpdateScore(&ssMegaHP, ptrMegaHP);
+					boolDelay[6] = true;
+					dead = true;
 				}
-				else if (*ptrBossHP <= 0) {
-					*ptrBossHP = 500;
-					Screen[3] = false;
-					Screen[4] = true;
-					GameOver = false;
+				if (*ptrBossHP <= 0) {
+					*ptrBossHP = 0;
+					boolDelay[7] = true;
+					deadBoss = true;
+					UpdateScore(&ssBossHP, ptrBossHP);
+					
 				}
 				batboss.Draw(window);
 				iceboss.Draw(window);
@@ -1458,6 +1517,10 @@ while (window.isOpen()) {
 				clock.restart();
 				spawnClock.restart();
 				delayClock.restart();
+				HuntClock.restart();
+				SnakeClock.restart();
+				minionClock_1.restart();
+				minionClock_2.restart();
 
 				sf::Text textScore;
 				sf::Text yourScore;

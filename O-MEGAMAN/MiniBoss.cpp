@@ -29,7 +29,7 @@ void MiniBoss::Hunt(float elapsedTime)
 		//printf("\n\n\n\n%f", speed);
 		body.setPosition(body.getPosition().x+5.0f, body.getPosition().y + 100.0f);
 	}
-	printf("\n\n\n\n%f", speed);
+	//printf("\n\n\n\n%f", speed);
 	if (body.getPosition().x >= 670.0f) {
 		speed = 200;
 		animation.UpdateMiniBoss(3);
