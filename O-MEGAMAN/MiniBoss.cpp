@@ -1,11 +1,20 @@
 #include "MiniBoss.h"
 
-MiniBoss::MiniBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position, float speed) :
+MiniBoss::MiniBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position, float speed,int spawnCount) :
 	animation(texture, imageCount, switchTime) {
 	row = 0;
 	randomMove = 0;
 	this->speed = speed;
-	body.setSize(sf::Vector2f(60.0f, 80.0f));
+	this->spawnCount = spawnCount;
+	spawnIceHit = 1;
+	minionUp1Drop=3;
+	minionUp2Drop = 3;
+	booliceMove = true;
+	icebossHunt = false;
+	iceboosDrop = true;
+	snakeSpawn = true;
+	snakeHunt = true;
+	body.setSize(sf::Vector2f(55.0f, 70.0f));
 	body.setOrigin(body.getSize() / 2.0f);
 	body.setPosition(position);
 	body.setTexture(texture);
@@ -46,7 +55,8 @@ void MiniBoss::Draw(sf::RenderWindow& window) {
 	window.draw(body);
 }
 
-void MiniBoss::SetPosition(float x, float y)
+void MiniBoss::SetPosition(sf::Vector2f position)
 {
-	body.setPosition(x, y);
+	body.setPosition(position);
 }
+

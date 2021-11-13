@@ -8,17 +8,21 @@ class EnergyBall
 public:
 	EnergyBall(sf::Texture* texture,sf::Vector2f position, sf::Vector2f size, float speed);
 	void Update(float elapsedTime, sf::RenderWindow& window,std::vector<class EnergyBall> energyballs,bool checkUP, int checkBott, bool checkLR);
-	void FollowUpdate(float elapsedTime, sf::Vector2f megamanPosition);
+	void FollowUpdate(float elapsedTime, sf::Vector2f megamanPos);
 	void parabolaUpdtae(float elapsedTime, int face);
 	void strikeUpdate(float elapsedTime,float x);
 	void Draw(sf::RenderWindow& window);
 	void OnCollision(sf::Vector2f direction);
+	void SetPosition(sf::Vector2f position);
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
 	}
 	Collider GetCollider() {
 		return Collider(body);
 	}
+public:
+	bool spawnBall;
+	int spawnCount;
 private:
 	sf::RectangleShape body;
 	float speed;

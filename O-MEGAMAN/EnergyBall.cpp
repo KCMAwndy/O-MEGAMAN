@@ -3,6 +3,7 @@
 EnergyBall::EnergyBall(sf::Texture* texture,sf::Vector2f position, sf::Vector2f size,float speed){
 	this->speed = speed;
 	faceRight = true;
+	spawnBall = false;
 	checkBott = 0;
 	body.setSize(size);
 	body.setOrigin(body.getSize() / 2.0f);
@@ -30,12 +31,23 @@ void EnergyBall::Update(float elapsedTime, sf::RenderWindow& window,std::vector<
 	body.move(velocity * elapsedTime);
 }
 
-void EnergyBall::FollowUpdate(float elapsedTime, sf::Vector2f megamanPosition)
+void EnergyBall::FollowUpdate(float elapsedTime, sf::Vector2f megamanPos)
 {
-	velocity.x = (megamanPosition.x - body.getPosition().x);
-	//velocity.y = (megamanPosition.y - body.getPosition().y);
-	velocity.y = speed;
-	body.move(velocity * elapsedTime);
+	if (megamanPos.x > body.getPosition().x) {
+		velocity.x = (body.getPosition().x + speed/2 * elapsedTime);
+	}
+	if (megamanPos.y > body.getPosition().y) {
+		velocity.y = (body.getPosition().y + speed/2 * elapsedTime);
+	}
+	if (megamanPos.x < body.getPosition().x) {
+		velocity.x = (body.getPosition().x - speed/2 * elapsedTime);
+	}
+	if (megamanPos.y < body.getPosition().y) {
+		velocity.y = (body.getPosition().y - speed/2 * elapsedTime);
+	}
+	body.setPosition(velocity);
+	float angle = (atan2f(megamanPos.y - velocity.y, megamanPos.x - velocity.x) * 180) / 3.14;
+	body.setRotation(angle);
 }
 
 void EnergyBall::parabolaUpdtae(float elapsedTime,int face)
@@ -75,4 +87,9 @@ void EnergyBall::OnCollision(sf::Vector2f direction)
 		velocity.y = 0.0f;//Colision on the top
 		// ผ่านไม่ได้มีสิ่งของอยู่บน v = 0
 	}
+}
+
+void EnergyBall::SetPosition(sf::Vector2f position)
+{
+	body.setPosition(position);
 }

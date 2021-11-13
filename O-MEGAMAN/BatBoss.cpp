@@ -6,7 +6,11 @@ BatBoss::BatBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime
 	this->speed = speed;
 	checkLR = false;
 	checkUP = true;
+	bossShoot = true;
+	spawnbossBall = false;
+	deadBoss = false;
 	checkBott = 0;
+	ballBossCount = 5;
 	body.setSize(sf::Vector2f(240.0f, 120.0f));
 	body.setOrigin(body.getSize() / 2.0f);
 	body.setPosition(position);
@@ -56,6 +60,11 @@ void BatBoss::Draw(sf::RenderWindow& window) {
 	for (size_t i = 0; i < energyballs.size(); i++) {
 		energyballs[i].Draw(window);
 	}
+}
+
+void BatBoss::SetPosition(sf::Vector2f position)
+{
+	body.setPosition(position);
 }
 
 //void Megaman::OnCollision(sf::Vector2f direction)

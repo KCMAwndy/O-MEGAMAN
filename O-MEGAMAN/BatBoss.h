@@ -14,6 +14,7 @@ public:
 	void Update(float elapsedTime,float movement,bool dead);
 	void Draw(sf::RenderWindow& window);
 	std::vector<class EnergyBall>	energyballs;
+	void SetPosition(sf::Vector2f position);
 	//void OnCollision(sf::Vector2f direction);
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
@@ -24,6 +25,12 @@ public:
 	Collider GetCollider() {
 		return Collider(body);
 	}
+
+public:
+	int ballBossCount;
+	bool bossShoot;
+	bool spawnbossBall;
+	bool deadBoss;
 private:
 	sf::RectangleShape body;
 	Animation animation;

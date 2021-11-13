@@ -24,6 +24,10 @@ public:
 	Collider GetCollider() {
 		return Collider(body);
 	}
+public:
+	bool iceHit;
+	bool fireHit;
+	bool dead;
 private:
 	//int shootTimer;
 	//bool checkLR ;

@@ -2,4 +2,4 @@ gun 1390
 nan 420
 bub 360
 toon 300
-game 170
+rain 190

@@ -9,12 +9,12 @@
 class MiniBoss
 {
 public:
-	MiniBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position, float speed);
+	MiniBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position, float speed, int spawnCount);
 	//void Update(float elapsedTime, sf::RenderWindow& window);
 	void Update(float elapsedTime, float movement);
 	void Hunt(float elapsedTime);
 	void Draw(sf::RenderWindow& window);
-	void SetPosition(float x, float y);
+	void SetPosition(sf::Vector2f position);
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
 	}
@@ -24,6 +24,16 @@ public:
 	Collider GetCollider() {
 		return Collider(body);
 	}
+public:
+	int spawnCount;
+	int spawnIceHit;
+	int minionUp1Drop;
+	int minionUp2Drop;
+	bool booliceMove;
+	bool icebossHunt;
+	bool iceboosDrop;
+	bool snakeSpawn;
+	bool snakeHunt;
 private:
 	sf::RectangleShape body;
 	Animation animation;
