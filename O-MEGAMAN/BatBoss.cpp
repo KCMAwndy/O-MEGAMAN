@@ -41,6 +41,7 @@ BatBoss::BatBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime
 void BatBoss::Update(float elapsedTime,float movement, bool dead) {
 	if (dead) {
 	row = 1;
+	deadBoss = true;
 	animation.limitUpdate(row, elapsedTime,false);
 	body.setTextureRect(animation.currentRect);
 	}

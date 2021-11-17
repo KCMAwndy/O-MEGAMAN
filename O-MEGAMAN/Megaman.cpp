@@ -56,6 +56,7 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window, bool iceHit, b
 	}
 	animation.limitUpdate(row, elapsedTime, faceRight);
 	body.setTextureRect(animation.currentRect);
+	velocity.x =0;
 	velocity.y += 5;
 	body.move(velocity * elapsedTime);
 	}
@@ -80,6 +81,7 @@ void Megaman::Update(float elapsedTime, sf::RenderWindow& window, bool iceHit, b
 			else {
 				faceRight = false;
 			}
+		velocity.x = 0;
 		animation.limitUpdate(row, elapsedTime, faceRight);
 		body.setTextureRect(animation.currentRect);
 	}

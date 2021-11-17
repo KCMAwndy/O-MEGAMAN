@@ -25,7 +25,6 @@ public:
 	Collider GetCollider() {
 		return Collider(body);
 	}
-
 public:
 	int ballBossCount;
 	bool bossShoot;
