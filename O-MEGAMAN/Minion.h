@@ -9,8 +9,6 @@ public:
 	Minion(sf::Texture* texture,sf::Vector2f position, sf::Vector2f size,float speed);
 	void Update(float elapsedTime);
 	void Draw(sf::RenderWindow& window);
-	std::vector<Minion> minions;
-	//void OnCollision(sf::Vector2f direction);
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
 	}
@@ -21,14 +19,13 @@ public:
 		return Collider(body);
 	}
 	Collider CheckCollision(Collider& other, sf::Vector2f direction, float push);
+public:
 	bool faceRight;
-//	bool CheckLR(std::vector<class Minion> minions,int i);
 private:
 	sf::RectangleShape body;
 	sf::Texture minionTexture;
-	float speed;
 	sf::Vector2f velocity;
+	float speed;
 	float collectPostition;
 	float collectTime;
-	sf::Clock delay;
 };

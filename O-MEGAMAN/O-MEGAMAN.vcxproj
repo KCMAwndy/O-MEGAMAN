@@ -154,7 +154,6 @@
     <ClCompile Include="Megaman.cpp" />
     <ClCompile Include="MiniBoss.cpp" />
     <ClCompile Include="Minion.cpp" />
-    <ClCompile Include="Platform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -165,7 +164,6 @@
     <ClInclude Include="Megaman.h" />
     <ClInclude Include="MiniBoss.h" />
     <ClInclude Include="Minion.h" />
-    <ClInclude Include="Platform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

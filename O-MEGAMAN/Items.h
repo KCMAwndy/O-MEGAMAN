@@ -7,10 +7,9 @@ class Items
 {
 public:
 	Items(sf::Texture* texture, sf::Vector2f position, sf::Vector2f size);
-	void Update(float elapsedTime, int itemSlot, int* score);
-	void movementUpdate( sf::Vector2f megamanPosition);
 	void Move(float elapsedTime);
 	void Draw(sf::RenderWindow& window);
+	void SetPosition(sf::Vector2f position);
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
 	}

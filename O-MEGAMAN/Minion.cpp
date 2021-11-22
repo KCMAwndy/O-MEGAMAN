@@ -26,13 +26,3 @@ void Minion::Draw(sf::RenderWindow& window) {
 	window.draw(body);
 }
 
-//bool Minion::CheckLR(std::vector<Minion> minions,int i)
-//{
-//	if (minions[i].GetPosition().x < 620.0f) {
-//		return false;
-//	}
-//	else {
-//		return true;
-//	}
-//}
-

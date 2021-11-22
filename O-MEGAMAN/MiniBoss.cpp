@@ -7,7 +7,7 @@ MiniBoss::MiniBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTi
 	this->speed = speed;
 	this->spawnCount = spawnCount;
 	spawnIceHit = 1;
-	minionUp1Drop=3;
+	minionUp1Drop = 3;
 	minionUp2Drop = 3;
 	booliceMove = true;
 	icebossHunt = false;
@@ -35,24 +35,16 @@ void MiniBoss::Hunt(float elapsedTime)
 	if (body.getPosition().x <= 60.0f) {
 		animation.UpdateMiniBoss(2);
 		speed = -200;
-		//printf("\n\n\n\n%f", speed);
 		body.setPosition(body.getPosition().x+5.0f, body.getPosition().y + 100.0f);
 	}
-	//printf("\n\n\n\n%f", speed);
 	if (body.getPosition().x >= 670.0f) {
 		speed = 200;
 		animation.UpdateMiniBoss(3);
 		body.setPosition(body.getPosition().x-5.0f, body.getPosition().y + 100.0f);
 	}
 	row = 0;
-	//animation.UpdateMiniBoss(2);
 	body.setTextureRect(animation.currentRect);
 	body.move(velocity*elapsedTime);
-}
-
-
-void MiniBoss::Draw(sf::RenderWindow& window) {
-	window.draw(body);
 }
 
 void MiniBoss::SetPosition(sf::Vector2f position)
@@ -60,3 +52,6 @@ void MiniBoss::SetPosition(sf::Vector2f position)
 	body.setPosition(position);
 }
 
+void MiniBoss::Draw(sf::RenderWindow& window) {
+	window.draw(body);
+}

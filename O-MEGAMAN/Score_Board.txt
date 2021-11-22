@@ -1,5 +1,6 @@
-gun 1390
-nan 420
-bub 360
-toon 300
-rain 190
+None 0
+None 0
+None 0
+None 0
+None 0
+

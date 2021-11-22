@@ -72,18 +72,3 @@ void Animation::limitUpdate(int row, float elapsedTime,bool faceRight)
 		currentRect.width = -abs(currentRect.width);
 	}
 }
-
-//void Animation::UpdateMinion(bool faceRight)
-//{
-//	currentImage.y = 0;
-//	currentImage.x = 0;
-//	currentRect.top = currentImage.y * currentRect.height;
-//	if (faceRight) {
-//		currentRect.left = currentImage.x * currentRect.width;
-//		currentRect.width = abs(currentRect.width);
-//	}
-//	else {
-//		currentRect.left = (currentImage.x + 1) * abs(currentRect.width);
-//		currentRect.width = -abs(currentRect.width);
-//	}
-//}

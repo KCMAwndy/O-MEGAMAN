@@ -7,22 +7,9 @@ Items::Items(sf::Texture* texture, sf::Vector2f position, sf::Vector2f size) {
 	body.setTexture(texture);
 }
 
-void Items::Update(float elapsedTime,int itemSlot,int *score) {
-	switch (itemSlot) {
-	case 1:
-		*score += 30;
-		break;
-	case 2:
-		*score += 20;
-		break;
-	case 3:
-		*score -= 20;
-		break;
-	}
-}
-void Items::movementUpdate(sf::Vector2f megamanPosition)
+void Items::SetPosition(sf::Vector2f position)
 {
-	body.setPosition(megamanPosition);
+	body.setPosition(position);
 }
 
 void Items::Move(float elapsedTime){

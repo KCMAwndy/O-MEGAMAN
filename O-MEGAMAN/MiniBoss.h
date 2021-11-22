@@ -10,7 +10,6 @@ class MiniBoss
 {
 public:
 	MiniBoss(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position, float speed, int spawnCount);
-	//void Update(float elapsedTime, sf::RenderWindow& window);
 	void Update(float elapsedTime, float movement);
 	void Hunt(float elapsedTime);
 	void Draw(sf::RenderWindow& window);

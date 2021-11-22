@@ -13,8 +13,6 @@ public:
 	void Draw(sf::RenderWindow& window);
 	void Hit(float elapsedTime, float scale);
 	void SetPosition(float x, float y);
-	//void OnCollision(sf::Vector2f direction);
-	//std::vector<class EnergyBall>	energyballs;
 	sf::Vector2f GetPosition() {
 		return body.getPosition();
 	}
@@ -29,19 +27,12 @@ public:
 	bool fireHit;
 	bool dead;
 private:
-	//int shootTimer;
-	//bool checkLR ;
-	//bool checkUP;
 	sf::RectangleShape body;
-	//sf::Texture energyballRightTexture;
-	//sf::Texture energyballLeftTexture;
-	//sf::Texture megaBulletTexture;
+	sf::Vector2f velocity;
 	Animation animation;
 	unsigned int row;
 	float speed;
 	bool faceRight;
-	//int checkBott;
-	sf::Vector2f velocity;
 	bool canjump = false;
 	float jumpHeight;
 	float height = 0.0;
