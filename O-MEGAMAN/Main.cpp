@@ -54,7 +54,7 @@ int main() {
 	bool SnakeShootLeft = true;
 	//------INT------
 	int enCount = 0, score = 0, megaHP = 100, bossHp = 500, minionSpeed = 80, enballSpeed = 250, iceCount = 0, bossCount = 0;
-	int* ptrenCount, * ptrScore, * ptrMegaHP, * ptrBossHP, * ptrminionSpeed, * ptrEnballSpeed, * ptrdeCount, * ptriceCount, * ptrbossCount;
+	int* ptrenCount, * ptrScore, * ptrMegaHP, * ptrBossHP, * ptrminionSpeed, * ptrEnballSpeed, * ptriceCount, * ptrbossCount;
 	ptrenCount = &enCount;
 	ptrScore = &score;
 	ptrMegaHP = &megaHP;
@@ -538,8 +538,8 @@ int main() {
 
 					timeSpeed += elapsedTime;
 					if (timeSpeed >= 30.0f) {
-						*ptrminionSpeed += 3;
-						*ptrEnballSpeed += 5;
+						*ptrminionSpeed += 1;
+						*ptrEnballSpeed += 2;
 						timeSpeed -= 30.0f;
 					}
 
@@ -611,7 +611,7 @@ int main() {
 						else if (energyballs[i].GetCollider().CheckCollision(icebossCollider)) { 
 							energyballs.erase(energyballs.begin() + i);
 							enermyHit.play();
-							*ptrminionSpeed += 3;
+							*ptrminionSpeed += 2;
 							if (!iceboss.icebossHunt) {
 								*ptrScore += 15;
 							}
@@ -630,7 +630,7 @@ int main() {
 									enermyHit.play();
 									*ptrScore += 20;
 									*ptrBossHP -= 20;
-									*ptrminionSpeed += 5;
+									*ptrminionSpeed += 2;
 									*ptrEnballSpeed += 5;
 									*ptrbossCount += 1;
 									shootTimer++;
@@ -1006,8 +1006,8 @@ int main() {
 									enermyHit.play();
 									*ptrScore += 10;
 									shootTimer++;
-									*ptrenCount += 1;
-									*ptrminionSpeed += 2;
+					
+									*ptrminionSpeed += 1;
 									UpdateScore(&ssScore, ptrScore);
 								}
 							}
@@ -1042,7 +1042,7 @@ int main() {
 									*ptrScore += 10;
 									shootTimer++;
 									*ptrenCount += 1;
-									*ptrminionSpeed += 2;
+									*ptrminionSpeed += 1;
 									UpdateScore(&ssScore, ptrScore);
 								}
 							}
@@ -1076,7 +1076,7 @@ int main() {
 									*ptrScore += 10;
 									shootTimer++;
 									*ptrenCount += 1;
-									*ptrminionSpeed += 2;
+									*ptrminionSpeed += 1;
 									UpdateScore(&ssScore, ptrScore);
 								}
 							}
@@ -1109,7 +1109,7 @@ int main() {
 									*ptrScore += 10;
 									shootTimer++;
 									*ptrenCount += 1;
-									*ptrminionSpeed += 2;
+									*ptrminionSpeed += 1;
 									UpdateScore(&ssScore, ptrScore);
 								}
 							}
@@ -1539,10 +1539,11 @@ int main() {
 									hitman.erase(hitman.begin() + i);
 									energyballs.erase(energyballs.begin() + j);
 									enermyHit.play();
-									*ptrminionSpeed += 3;
+									*ptrminionSpeed += 2;
 									shootTimer++;
 									*ptrScore += 10;
 									*ptrEnballSpeed += 5;
+									*ptrenCount += 1;
 									UpdateScore(&ssScore, ptrScore);
 								}
 							}

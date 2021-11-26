@@ -1,6 +1,5 @@
+newyork 1150
+max 1080
+hello 985
+nov 975
 None 0
-None 0
-None 0
-None 0
-None 0
-
